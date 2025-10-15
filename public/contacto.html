@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto - THE TWENTIES</title>
+  <link rel="stylesheet" href="contacto.css">
+  <link rel="icon" href="https://raw.githubusercontent.com/AbrahamJ10/THE-TWENTIES/main/IMAGENES/LOGO.jpg">
+</head>
+<body>
+
+  <!-- ===== ENCABEZADO ===== -->
+  <header>
+    <div class="logo">
+      <img src="https://raw.githubusercontent.com/AbrahamJ10/THE-TWENTIES/main/IMAGENES/LOGO.jpg" alt="Logo" />
+      <h1>THE TWENTIES</h1>
+    </div>
+    <nav>
+  <ul>
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="productos.html">Productos</a></li>
+    <li><a href="contacto.html">Contacto</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+</nav>
+  </header>
+
+  <!-- ===== SECCIÓN CONTACTO ===== -->
+  <section class="contacto">
+    <h2>Contáctanos</h2>
+    <p class="descripcion">
+      Si tienes dudas, consultas o deseas más información sobre nuestros productos, 
+      completa el formulario y te responderemos a la brevedad.
+    </p>
+
+    <div class="contenedor-contacto">
+      <!-- Formulario -->
+      <form class="formulario">
+        <label>Nombre completo</label>
+        <input type="text" placeholder="Escribe tu nombre completo" required>
+
+        <label>Correo electrónico</label>
+        <input type="email" placeholder="ejemplo@correo.com" required>
+
+        <label>Asunto</label>
+        <input type="text" placeholder="Motivo del mensaje" required>
+
+        <label>Mensaje</label>
+        <textarea rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+
+        <button type="submit">Enviar mensaje</button>
+      </form>
+
+      <!-- Información de contacto -->
+      <div class="info">
+        <h3>Información</h3>
+        <p><strong>Dirección:</strong> Av. Los Olivos 235, Lima - Perú</p>
+        <p><strong>Teléfono:</strong> +51 999 888 777</p>
+        <p><strong>Correo:</strong> info@thetwenties.pe</p>
+        <p><strong>Horario:</strong> Lunes a Sábado, 9:00 a.m. - 6:00 p.m.</p>
+
+        <div class="mapa">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.550195309669!2d-77.04279362480563!3d-12.073131442566692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c8b3b736d4f1%3A0x1e0e1d124f790d47!2sLima%20Centro!5e0!3m2!1ses!2spe!4v1709234567890"
+            allowfullscreen=""
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BOTÓN WHATSAPP ===== -->
+  <a href="https://wa.me/51999888777?text=¡Hola!%20Quisiera%20consultar%20más%20información%20sobre%20THE%20TWENTIES."
+     class="whatsapp-btn" target="_blank">
+     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+     Consultar
+  </a>
+
+</body>
+</html>

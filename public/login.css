@@ -1,0 +1,160 @@
+/* ===== ESTILOS GENERALES ===== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  background-color: white;
+}
+
+/* ===== ENCABEZADO ===== */
+header {
+  background-color: #F2E5D5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 60px;
+  margin-right: 15px;
+}
+
+.logo h1 {
+  color: #800000;
+  font-size: 28px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #800000;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+nav ul li a:hover,
+nav ul li a.activo {
+  text-decoration: underline;
+  transform: scale(1.1);
+}
+
+/* ===== LOGIN OFICINA ===== */
+.login-container {
+  display: flex;
+  height: calc(100vh - 90px);
+  background-color: white;
+}
+
+/* Lado izquierdo (logo) */
+.login-left {
+  flex: 1;
+  background-color: #fdf8f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 2px solid #F2E5D5;
+}
+
+.login-left img {
+  width: 280px;
+  max-width: 80%;
+  border-radius: 10px;
+}
+
+/* Lado derecho (formulario) */
+.login-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+.form-login {
+  background-color: #fdf8f3;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  width: 360px;
+}
+
+.form-login h2 {
+  color: #800000;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 24px;
+}
+
+.form-login label {
+  display: block;
+  font-weight: bold;
+  color: #800000;
+  margin-top: 15px;
+}
+
+.form-login input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+}
+
+.form-login input:focus {
+  border-color: #800000;
+  box-shadow: 0 0 4px rgba(128, 0, 0, 0.3);
+}
+
+.form-login button {
+  width: 100%;
+  background-color: #800000;
+  color: white;
+  border: none;
+  margin-top: 25px;
+  padding: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.form-login button:hover {
+  background-color: #b30000;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .login-container {
+    flex-direction: column;
+  }
+  .login-left {
+    border-right: none;
+    border-bottom: 2px solid #F2E5D5;
+    padding: 30px 0;
+  }
+  .form-login {
+    width: 90%;
+    margin: 30px auto;
+  }
+}
