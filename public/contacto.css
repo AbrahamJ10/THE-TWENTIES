@@ -17,11 +17,13 @@ header {
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-wrap: wrap; /* ✅ para que se ajuste en pantallas pequeñas */
 }
 
 .logo {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .logo img {
@@ -32,6 +34,7 @@ header {
 .logo h1 {
   color: #800000;
   font-size: 28px;
+  white-space: nowrap;
 }
 
 nav ul {
@@ -40,6 +43,7 @@ nav ul {
   gap: 25px;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
 }
 
 nav ul li a {
@@ -93,6 +97,7 @@ nav ul li a.activo {
   width: 400px;
   display: flex;
   flex-direction: column;
+  max-width: 100%;
 }
 
 .formulario label {
@@ -137,6 +142,10 @@ nav ul li a.activo {
 /* ===== INFO CONTACTO ===== */
 .info {
   max-width: 400px;
+  background-color: #fdf8f3;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
 .info h3 {
@@ -184,4 +193,65 @@ nav ul li a.activo {
 .whatsapp-btn img {
   width: 25px;
   height: 25px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablets (hasta 900px) */
+@media (max-width: 900px) {
+  header {
+    padding: 10px 25px;
+  }
+
+  nav ul {
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .contacto {
+    padding: 40px 25px;
+  }
+
+  .contenedor-contacto {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .formulario,
+  .info {
+    width: 90%;
+  }
+}
+
+/* Celulares (hasta 600px) */
+@media (max-width: 600px) {
+  .logo img {
+    height: 45px;
+    margin-right: 10px;
+  }
+
+  .logo h1 {
+    font-size: 22px;
+  }
+
+  nav ul li a {
+    font-size: 16px;
+  }
+
+  .contacto h2 {
+    font-size: 24px;
+  }
+
+  .descripcion {
+    font-size: 14px;
+  }
+
+  .formulario {
+    padding: 20px;
+  }
+
+  .info {
+    padding: 20px;
+  }
 }

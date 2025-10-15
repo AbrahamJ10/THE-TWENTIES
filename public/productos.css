@@ -17,11 +17,13 @@ header {
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-wrap: wrap;
 }
 
 .logo {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .logo img {
@@ -32,6 +34,7 @@ header {
 .logo h1 {
   color: #800000;
   font-size: 28px;
+  white-space: nowrap;
 }
 
 nav ul {
@@ -40,6 +43,8 @@ nav ul {
   gap: 25px;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 nav ul li a {
@@ -59,11 +64,12 @@ nav ul li a.activo {
 /* ===== FILTROS ===== */
 .filtros {
   display: flex;
-  justify-content: space-between; /* ← los separa uno a la izquierda y otro a la derecha */
+  justify-content: space-between;
   align-items: center;
   padding: 0 40px;
   margin-bottom: 30px;
   flex-wrap: wrap;
+  gap: 20px;
 }
 
 .filtro-izquierda select,
@@ -77,6 +83,7 @@ nav ul li a.activo {
 
 .filtro-derecha input {
   width: 230px;
+  max-width: 100%;
 }
 
 /* ===== PRODUCTOS ===== */
@@ -166,6 +173,7 @@ nav ul li a.activo {
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   text-decoration: none;
   transition: transform 0.3s ease;
+  z-index: 1001;
 }
 
 .whatsapp-btn:hover {
@@ -176,4 +184,114 @@ nav ul li a.activo {
 .whatsapp-btn img {
   width: 25px;
   height: 25px;
+}
+
+/* ======== RESPONSIVE ======== */
+
+/* --- Tablets (≤ 992px) --- */
+@media (max-width: 992px) {
+  header {
+    flex-direction: column;
+    padding: 15px 20px;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  .logo h1 {
+    font-size: 22px;
+  }
+
+  nav ul {
+    gap: 15px;
+  }
+
+  .filtros {
+    padding: 0 20px;
+    justify-content: center;
+  }
+
+  .nueva-coleccion {
+    padding: 30px 20px;
+  }
+
+  .item {
+    width: 200px;
+  }
+
+  .whatsapp-btn {
+    bottom: 20px;
+    right: 20px;
+    padding: 8px 15px;
+  }
+}
+
+/* --- Celulares medianos (≤ 768px) --- */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .logo {
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .filtros {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .filtro-derecha input {
+    width: 100%;
+  }
+
+  .item {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* --- Celulares pequeños (≤ 480px) --- */
+@media (max-width: 480px) {
+  header {
+    padding: 10px 15px;
+  }
+
+  .logo img {
+    height: 45px;
+    margin-right: 10px;
+  }
+
+  .logo h1 {
+    font-size: 20px;
+  }
+
+  nav ul li a {
+    font-size: 16px;
+  }
+
+  .nueva-coleccion {
+    padding: 20px;
+  }
+
+  .item {
+    width: 100%;
+    max-width: 240px;
+  }
+
+  .whatsapp-btn {
+    bottom: 15px;
+    right: 15px;
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .whatsapp-btn img {
+    width: 22px;
+    height: 22px;
+  }
 }

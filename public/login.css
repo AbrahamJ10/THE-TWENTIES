@@ -17,11 +17,13 @@ header {
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-wrap: wrap; /* ✅ permite adaptarse en pantallas pequeñas */
 }
 
 .logo {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .logo img {
@@ -32,6 +34,7 @@ header {
 .logo h1 {
   color: #800000;
   font-size: 28px;
+  white-space: nowrap;
 }
 
 nav ul {
@@ -40,6 +43,7 @@ nav ul {
   gap: 25px;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
 }
 
 nav ul li a {
@@ -61,6 +65,7 @@ nav ul li a.activo {
   display: flex;
   height: calc(100vh - 90px);
   background-color: white;
+  flex-wrap: wrap; /* ✅ adapta el layout si no hay espacio */
 }
 
 /* Lado izquierdo (logo) */
@@ -71,12 +76,14 @@ nav ul li a.activo {
   justify-content: center;
   align-items: center;
   border-right: 2px solid #F2E5D5;
+  padding: 30px;
 }
 
 .login-left img {
   width: 280px;
   max-width: 80%;
   border-radius: 10px;
+  height: auto;
 }
 
 /* Lado derecho (formulario) */
@@ -86,6 +93,7 @@ nav ul li a.activo {
   justify-content: center;
   align-items: center;
   background-color: white;
+  padding: 20px;
 }
 
 .form-login {
@@ -94,6 +102,7 @@ nav ul li a.activo {
   border-radius: 10px;
   box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   width: 360px;
+  max-width: 95%;
 }
 
 .form-login h2 {
@@ -144,17 +153,59 @@ nav ul li a.activo {
 }
 
 /* ===== RESPONSIVE ===== */
+
+/* Tablets medianas (hasta 900px) */
 @media (max-width: 900px) {
+  header {
+    padding: 10px 25px;
+  }
+
+  nav ul {
+    justify-content: center;
+    gap: 15px;
+  }
+
   .login-container {
     flex-direction: column;
+    height: auto;
   }
+
   .login-left {
     border-right: none;
     border-bottom: 2px solid #F2E5D5;
     padding: 30px 0;
   }
+
+  .login-right {
+    padding: 30px 15px;
+  }
+
   .form-login {
     width: 90%;
     margin: 30px auto;
+  }
+}
+
+/* Celulares pequeños (hasta 600px) */
+@media (max-width: 600px) {
+  .logo img {
+    height: 45px;
+    margin-right: 10px;
+  }
+
+  .logo h1 {
+    font-size: 22px;
+  }
+
+  nav ul li a {
+    font-size: 16px;
+  }
+
+  .form-login {
+    padding: 25px;
+  }
+
+  .form-login h2 {
+    font-size: 20px;
   }
 }
