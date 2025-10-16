@@ -17,16 +17,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("✅ " + data.message);
-        // Redirigir a página principal o panel
-        window.location.href = "index.html";
+        alert(data.message);
+        // 🔁 Redirige correctamente al dashboard (carpeta correcta)
+        window.location.href = data.redirect || "/dashboard/almacen.html";
       } else {
         alert("❌ " + data.message);
       }
 
     } catch (error) {
       console.error("Error:", error);
-      alert("Error al conectar con el servidor.");
+      alert("⚠️ Error al conectar con el servidor.");
     }
   });
 });

@@ -1,0 +1,111 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  margin: 0;
+  height: 100vh;
+}
+
+.menu {
+  width: 200px;
+  background: #f2e5d5;
+  padding: 20px;
+  color: #800000;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  padding: 10px 0;
+}
+
+.menu li.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.menu a {
+  color: #800000;
+  text-decoration: none;
+}
+
+main {
+  flex-grow: 1;
+  padding: 30px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background: #800000;
+  color: white;
+}
+/* ===== BOTONES ===== */
+.btn {
+  padding: 6px 12px;
+  border: 1px solid #D4AF37;
+  background-color: white;
+  color: #B8860B;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background-color: #D4AF37;
+  color: white;
+}
+
+.btn.editar {
+  border-color: #B8860B;
+}
+
+.btn.eliminar {
+  border-color: #B33A3A;
+  color: #B33A3A;
+}
+
+.btn.eliminar:hover {
+  background-color: #B33A3A;
+  color: white;
+}
+/* ===== FILTRO Y BOTÓN AGREGAR ===== */
+.filtro {
+  margin-bottom: 15px;
+}
+
+.filtro input {
+  padding: 8px 12px;
+  width: 250px;
+  border: 1px solid #D4AF37;
+  border-radius: 6px;
+  background-color: #fff8f0;
+}
+
+.acciones {
+  margin-top: 15px;
+  text-align: right;
+}
+
+.btn.agregar {
+  background-color: #D4AF37;
+  color: white;
+  border: none;
+}
+
+.btn.agregar:hover {
+  background-color: #b68c1f;
+}

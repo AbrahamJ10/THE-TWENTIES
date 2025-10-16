@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Configuración</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <aside class="menu">
+    <h2>THE TWENTIES</h2>
+    <ul>
+      <li><a href="usuarios.html">Usuario</a></li>
+      <li><a href="almacen.html">Almacén</a></li>
+      <li class="active">Configuración</li>
+    </ul>
+  </aside>
+
+  <main>
+    <h1>Configuraciones</h1>
+
+    <section id="config">
+      <div>
+        <h3>Cargos</h3>
+        <ul id="listaCargos"></ul>
+      </div>
+      <div>
+        <h3>Categorías</h3>
+        <ul id="listaCategorias"></ul>
+      </div>
+      <div>
+        <h3>Subcategorías</h3>
+        <ul id="listaSubcategorias"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    fetch('/api/configuracion')
+      .then(res => res.json())
+      .then(data => {
+        const cargos = document.getElementById('listaCargos');
+        data.cargos.forEach(c => cargos.innerHTML += `<li>${c.nombre_cargo}</li>`);
+        const cat = document.getElementById('listaCategorias');
+        data.categorias.forEach(c => cat.innerHTML += `<li>${c.nombre_categoria}</li>`);
+        const sub = document.getElementById('listaSubcategorias');
+        data.subcategorias.forEach(s => sub.innerHTML += `<li>${s.nombre_subcategoria}</li>`);
+      });
+  </script>
+</body>
+</html>

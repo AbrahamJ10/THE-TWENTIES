@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Almacén</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <aside class="menu">
+    <h2>THE TWENTIES</h2>
+    <ul>
+      <li><a href="usuarios.html">Usuario</a></li>
+      <li class="active">Almacén</li>
+      <li><a href="configuracion.html">Configuración</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <h1>Lista de productos</h1>
+
+    <!-- 🔍 Filtro de búsqueda -->
+    <div class="filtro">
+      <input type="text" id="buscarProducto" placeholder="Buscar por código o nombre...">
+    </div>
+
+    <table id="tablaAlmacen">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Fecha</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Categoría</th>
+          <th>Subcategoría</th>
+          <th>Stock</th>
+          <th>Costo</th>
+          <th>Imagen</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- ➕ Botón Agregar -->
+    <div class="acciones">
+      <button class="btn agregar">Agregar nuevo producto</button>
+    </div>
+  </main>
+
+  <script>
+    const tbody = document.querySelector('#tablaAlmacen tbody');
+    const inputBuscar = document.getElementById('buscarProducto');
+
+    let productos = [];
+
+    // 🔹 Cargar productos
+    fetch('/api/almacen')
+      .then(res => res.json())
+      .then(data => {
+        productos = data;
+        mostrarProductos(productos);
+      });
+
+    // 🔹 Mostrar productos
+    function mostrarProductos(lista) {
+      tbody.innerHTML = '';
+      lista.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.id_almacen}</td>
+          <td>${p.fecha}</td>
+          <td>${p.nombre}</td>
+          <td>${p.descripcion}</td>
+          <td>${p.categoria || ''}</td>
+          <td>${p.subcategoria || ''}</td>
+          <td>${p.stock}</td>
+          <td>S/ ${p.costo}</td>
+          <td><img src="/${p.imagen_ruta}" width="40" alt="imagen"></td>
+          <td><button class="btn editar">Editar</button></td>
+          <td><button class="btn eliminar">Eliminar</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 🔍 Filtrar productos
+    inputBuscar.addEventListener('input', e => {
+      const texto = e.target.value.toLowerCase();
+      const filtrados = productos.filter(p => 
+        p.nombre.toLowerCase().includes(texto) ||
+        p.id_almacen.toString().includes(texto)
+      );
+      mostrarProductos(filtrados);
+    });
+  </script>
+</body>
+</html>

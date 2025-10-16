@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Usuarios</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <aside class="menu">
+    <h2>THE TWENTIES</h2>
+    <ul>
+      <li class="active">Usuario</li>
+      <li><a href="almacen.html">Almacén</a></li>
+      <li><a href="configuracion.html">Configuración</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <h1>Lista de trabajadores</h1>
+
+    <!-- 🔍 Filtro de búsqueda -->
+    <div class="filtro">
+      <input type="text" id="buscarUsuario" placeholder="Buscar por nombre...">
+    </div>
+
+    <table id="tablaUsuarios">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Correo</th>
+          <th>Cargo</th>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- ➕ Botón Agregar -->
+    <div class="acciones">
+      <button class="btn agregar">Agregar nuevo usuario</button>
+    </div>
+  </main>
+
+  <script>
+    const tbody = document.querySelector('#tablaUsuarios tbody');
+    const inputBuscar = document.getElementById('buscarUsuario');
+
+    let usuarios = [];
+
+    // 🔹 Cargar usuarios
+    fetch('/api/usuarios')
+      .then(res => res.json())
+      .then(data => {
+        usuarios = data;
+        mostrarUsuarios(usuarios);
+      });
+
+    // 🔹 Mostrar usuarios
+    function mostrarUsuarios(lista) {
+      tbody.innerHTML = '';
+      lista.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${u.nombre}</td>
+          <td>${u.apellido}</td>
+          <td>${u.correo}</td>
+          <td>${u.cargo}</td>
+          <td>${u.username}</td>
+          <td>${u.password}</td>
+          <td><button class="btn editar">Editar</button></td>
+          <td><button class="btn eliminar">Eliminar</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 🔍 Filtrar usuarios
+    inputBuscar.addEventListener('input', e => {
+      const texto = e.target.value.toLowerCase();
+      const filtrados = usuarios.filter(u => 
+        u.nombre.toLowerCase().includes(texto)
+      );
+      mostrarUsuarios(filtrados);
+    });
+  </script>
+</body>
+</html>
