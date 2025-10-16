@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         alert(data.message);
         // 🔁 Redirige correctamente al dashboard (carpeta correcta)
-        window.location.href = data.redirect || "/dashboard/almacen.html";
+        window.location.href = data.redirect || "/dashboard/usuarios.html";
       } else {
         alert("❌ " + data.message);
       }
