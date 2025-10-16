@@ -44,25 +44,28 @@
 
     <!-- ➕ Botón Agregar -->
     <div class="acciones">
-      <button class="btn agregar">Agregar nuevo producto</button>
+      <button id="btnAgregarProducto" class="btn agregar">Agregar nuevo producto</button>
     </div>
   </main>
+
+  <!-- 💬 Modal flotante (se llenará dinámicamente con JS) -->
+  <div id="modalContainer"></div>
 
   <script>
     const tbody = document.querySelector('#tablaAlmacen tbody');
     const inputBuscar = document.getElementById('buscarProducto');
-
     let productos = [];
 
-    // 🔹 Cargar productos
+    // 🔹 Cargar productos desde el servidor
     fetch('/api/almacen')
       .then(res => res.json())
       .then(data => {
         productos = data;
         mostrarProductos(productos);
-      });
+      })
+      .catch(err => console.error("Error al cargar productos:", err));
 
-    // 🔹 Mostrar productos
+    // 🔹 Mostrar productos en la tabla
     function mostrarProductos(lista) {
       tbody.innerHTML = '';
       lista.forEach(p => {
@@ -76,9 +79,11 @@
           <td>${p.subcategoria || ''}</td>
           <td>${p.stock}</td>
           <td>S/ ${p.costo}</td>
-          <td><img src="/${p.imagen_ruta}" width="40" alt="imagen"></td>
-          <td><button class="btn editar">Editar</button></td>
-          <td><button class="btn eliminar">Eliminar</button></td>
+          <td>
+            ${p.imagen_ruta ? `<img src="/${p.imagen_ruta}" width="40" alt="imagen">` : '—'}
+          </td>
+          <td><button class="btn editar" data-id="${p.id_almacen}">Editar</button></td>
+          <td><button class="btn eliminar" data-id="${p.id_almacen}">Eliminar</button></td>
         `;
         tbody.appendChild(tr);
       });
@@ -87,12 +92,15 @@
     // 🔍 Filtrar productos
     inputBuscar.addEventListener('input', e => {
       const texto = e.target.value.toLowerCase();
-      const filtrados = productos.filter(p => 
+      const filtrados = productos.filter(p =>
         p.nombre.toLowerCase().includes(texto) ||
         p.id_almacen.toString().includes(texto)
       );
       mostrarProductos(filtrados);
     });
   </script>
+
+  <!-- Script con las funciones CRUD -->
+  <script src="/js/almacen.js"></script>
 </body>
 </html>

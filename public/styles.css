@@ -62,15 +62,27 @@ nav ul li a:hover {
 .carrusel {
   position: relative;
   width: 100%;
-  height: 500px;
+  height: 80vh; /* ✅ Altura del carrusel (ajustable: 70vh–90vh) */
   overflow: hidden;
+  display: flex;
 }
 
-.carrusel .slide img {
+.carrusel .slide {
+  min-width: 100%;
+  transition: transform 0.8s ease-in-out;
+}
+
+.carrusel img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
+  object-fit: cover; /* ✅ Muestra toda la imagen sin deformarla */
+}
+
+/* Opcional: si quieres que las imágenes no se recorten y se vean completas */
+@media (max-width: 768px) {
+  .carrusel {
+    height: 50vh; /* ✅ Reduce la altura en pantallas pequeñas */
+  }
 }
 
 /* ===== INFO EMPRESA ===== */

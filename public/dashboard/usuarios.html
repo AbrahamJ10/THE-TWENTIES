@@ -20,7 +20,7 @@
 
     <!-- 🔍 Filtro de búsqueda -->
     <div class="filtro">
-      <input type="text" id="buscarUsuario" placeholder="Buscar por nombre...">
+      <input type="text" id="buscarUsuario" placeholder="Buscar por nombre, apellido o usuario...">
     </div>
 
     <table id="tablaUsuarios">
@@ -41,25 +41,28 @@
 
     <!-- ➕ Botón Agregar -->
     <div class="acciones">
-      <button class="btn agregar">Agregar nuevo usuario</button>
+      <button id="btnAgregarUsuario" class="btn agregar">Agregar nuevo usuario</button>
     </div>
   </main>
+
+  <!-- 💬 Modal flotante (se llena dinámicamente desde usuarios.js) -->
+  <div id="modalContainer"></div>
 
   <script>
     const tbody = document.querySelector('#tablaUsuarios tbody');
     const inputBuscar = document.getElementById('buscarUsuario');
-
     let usuarios = [];
 
-    // 🔹 Cargar usuarios
+    // 🔹 Cargar usuarios desde backend
     fetch('/api/usuarios')
       .then(res => res.json())
       .then(data => {
         usuarios = data;
         mostrarUsuarios(usuarios);
-      });
+      })
+      .catch(err => console.error("Error al cargar usuarios:", err));
 
-    // 🔹 Mostrar usuarios
+    // 🔹 Mostrar usuarios en tabla
     function mostrarUsuarios(lista) {
       tbody.innerHTML = '';
       lista.forEach(u => {
@@ -71,21 +74,26 @@
           <td>${u.cargo}</td>
           <td>${u.username}</td>
           <td>${u.password}</td>
-          <td><button class="btn editar">Editar</button></td>
-          <td><button class="btn eliminar">Eliminar</button></td>
+          <td><button class="btn editar" data-id="${u.usuario_id}">Editar</button></td>
+          <td><button class="btn eliminar" data-id="${u.usuario_id}">Eliminar</button></td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // 🔍 Filtrar usuarios
+    // 🔍 Filtro de búsqueda
     inputBuscar.addEventListener('input', e => {
       const texto = e.target.value.toLowerCase();
       const filtrados = usuarios.filter(u => 
-        u.nombre.toLowerCase().includes(texto)
+        u.nombre.toLowerCase().includes(texto) ||
+        u.apellido.toLowerCase().includes(texto) ||
+        u.username.toLowerCase().includes(texto)
       );
       mostrarUsuarios(filtrados);
     });
   </script>
+
+  <!-- Script principal para agregar/editar/eliminar -->
+  <script src="/js/usuarios.js"></script>
 </body>
 </html>
