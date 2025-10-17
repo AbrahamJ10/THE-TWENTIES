@@ -1,3 +1,7 @@
+// ============================================================
+// 🌐 THE TWTIES - Servidor Express con PostgreSQL (Neon)
+// ============================================================
+
 const express = require("express");
 const path = require("path");
 const { Pool } = require("pg");
@@ -8,7 +12,9 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 🔗 Conexión a Neon
+// ============================================================
+// 🔗 Conexión a Neon (sin bloquear el arranque del servidor)
+// ============================================================
 const pool = new Pool({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
@@ -18,10 +24,24 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-// 📂 Middleware
+// Conectar en segundo plano (no bloquea Express)
+pool.connect()
+  .then(() => console.log("✅ Conectado a PostgreSQL (Neon)"))
+  .catch(err => console.error("❌ Error al conectar a PostgreSQL:", err.message));
+
+// ============================================================
+// ⚙️ Middleware
+// ============================================================
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// ============================================================
+// ❤️ Ruta rápida para Render (evita pantalla negra)
+// ============================================================
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 // ============================================================
 // 🔐 LOGIN
@@ -47,7 +67,7 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Contraseña incorrecta" });
     }
 
-    // Si están cifradas con bcrypt (descomenta si usas hash):
+    // Si usas bcrypt, descomenta esto:
     // const isMatch = await bcrypt.compare(password, user.password);
     // if (!isMatch) return res.status(401).json({ message: "Contraseña incorrecta" });
 
@@ -152,16 +172,20 @@ app.get("/api/usuarios", async (req, res) => {
 });
 
 // ============================================================
-// 🌐 SERVIR LA PÁGINA PRINCIPAL (index.html)
+// 🌐 SERVIR LA PÁGINA PRINCIPAL
 // ============================================================
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ✅ Manejar cualquier otra ruta desconocida (SPA o refresh)
+// ✅ Manejo de rutas desconocidas (SPA o refresh)
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// 🚀 Iniciar servidor
-app.listen(PORT, () => console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`));
+// ============================================================
+// 🚀 Iniciar servidor (responde instantáneamente)
+// ============================================================
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+});
