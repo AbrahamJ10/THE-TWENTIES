@@ -28,14 +28,26 @@ function renderProductos(data) {
   }
 
   data.forEach(p => {
-    // usa las propiedades que tu backend devuelve: asumimos id_almacen, fecha, nombre, descripcion, categoria, subcategoria, stock, costo, imagen_ruta
     const id = p.id_almacen;
-    const imgHtml = p.imagen_ruta ? `<img src="/${p.imagen_ruta}" width="40" alt="img">` : "—";
+
+    // 🔹 Mostrar solo la fecha sin hora
+    const fechaSolo = p.fecha
+      ? new Date(p.fecha).toLocaleDateString('es-PE', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        })
+      : "";
+
+    const imgHtml = p.imagen_ruta
+      ? `<img src="/${p.imagen_ruta}" width="40" alt="img">`
+      : "—";
+
     const tr = document.createElement("tr");
     tr.dataset.id = id;
     tr.innerHTML = `
       <td>${id}</td>
-      <td>${p.fecha || ""}</td>
+      <td>${fechaSolo}</td>
       <td>${p.nombre || ""}</td>
       <td>${p.descripcion || ""}</td>
       <td>${p.categoria || ""}</td>
@@ -49,6 +61,7 @@ function renderProductos(data) {
     tbody.appendChild(tr);
   });
 }
+
 
 // --- ABRIR MODAL (AGREGAR / EDITAR) ---
 async function abrirModal(producto = null) {

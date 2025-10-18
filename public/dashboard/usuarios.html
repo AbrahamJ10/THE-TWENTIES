@@ -12,6 +12,7 @@
       <li class="active">Usuario</li>
       <li><a href="almacen.html">Almacén</a></li>
       <li><a href="configuracion.html">Configuración</a></li>
+      <li><button id="btnSalir" class="btn-salir">⎋ Salir</button></li>
     </ul>
   </aside>
 
@@ -95,5 +96,11 @@
 
   <!-- Script principal para agregar/editar/eliminar -->
   <script src="/js/usuarios.js"></script>
+  <script>
+  document.getElementById("btnSalir").addEventListener("click", () => {
+    window.location.href = "/index.html";
+  });
+</script>
+
 </body>
 </html>

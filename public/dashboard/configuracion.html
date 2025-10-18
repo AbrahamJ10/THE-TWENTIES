@@ -205,6 +205,24 @@ td {
     width: 100%;
   }
 }
+/* ===== BOTÓN SALIR ===== */
+.btn-salir {
+  margin-top: 15px;
+  width: 100%;
+  background: #b33a3a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.btn-salir:hover {
+  background: #800000;
+  transform: scale(1.05);
+}
 
   </style>
 </head>
@@ -215,6 +233,7 @@ td {
       <li><a href="usuarios.html">Usuario</a></li>
       <li><a href="almacen.html">Almacén</a></li>
       <li class="active">Configuración</li>
+      <li><button id="btnSalir" class="btn-salir">⎋ Salir</button></li>
     </ul>
   </aside>
 
@@ -343,5 +362,11 @@ td {
     }
   }
 </script>
+<script>
+  document.getElementById("btnSalir").addEventListener("click", () => {
+    window.location.href = "/index.html";
+  });
+</script>
+
 </body>
 </html>

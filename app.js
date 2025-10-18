@@ -10,6 +10,25 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 require("dotenv").config();
 
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "the_twties", // 📁 carpeta en Cloudinary
+    allowed_formats: ["jpg", "png", "jpeg"]
+  }
+});
+
+const upload = multer({ storage });
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -77,20 +96,8 @@ app.post("/login", async (req, res) => {
 // ============================================================
 // 📸 Configuración de subida de imágenes con Multer
 // ============================================================
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "public", "uploads"));
-  },
-  filename: (req, file, cb) => {
-    const nombreUnico = Date.now() + "-" + file.originalname.replace(/\s+/g, "_");
-    cb(null, nombreUnico);
-  },
-});
+// 📸 Configuración de subida de imágenes con Multer
 
-const upload = multer({ storage });
-
-// ✅ Ruta pública para imágenes
-app.use("/uploads", express.static(path.join(__dirname, "public", "uploads")));
 
 // ============================================================
 // 📦 CRUD DEL ALMACÉN (con soporte de imagen)
@@ -129,7 +136,7 @@ app.get("/api/almacen", async (req, res) => {
 app.post("/api/almacen", upload.single("imagen"), async (req, res) => {
   try {
     const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo } = req.body;
-    const imagen_ruta = req.file ? `uploads/${req.file.filename}` : null;
+    const imagen_ruta = req.file ? req.file.path : null;
 
     await pool.query(
       `INSERT INTO almacen (nombre, descripcion, categoria_id, subcategoria_id, stock, costo, fecha, imagen_ruta)
@@ -146,19 +153,43 @@ app.post("/api/almacen", upload.single("imagen"), async (req, res) => {
 
 // 🔹 Editar producto (imagen opcional)
 app.put("/api/almacen/:id", upload.single("imagen"), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo } = req.body;
-    const imagen_ruta = req.file ? `uploads/${req.file.filename}` : req.body.imagen_ruta || null;
+  const { id } = req.params;
+  const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo, fecha } = req.body;
 
+  try {
+    let imagenUrl;
+
+    // Si se subió una nueva imagen a Cloudinary
+    if (req.file && req.file.path) {
+      imagenUrl = req.file.path; // ✅ URL de Cloudinary
+    }
+
+    // Obtener la imagen actual desde la BD
+    const result = await pool.query(
+      "SELECT imagen_ruta FROM almacen WHERE id_almacen = $1",
+      [id]
+    );
+    const imagenActual = result.rows[0]?.imagen_ruta;
+
+    // Usar la actual si no se subió nueva
+    const imagenFinal = imagenUrl || imagenActual;
+
+    // Actualizar producto
     await pool.query(
       `UPDATE almacen
-       SET nombre=$1, descripcion=$2, categoria_id=$3, subcategoria_id=$4, stock=$5, costo=$6, imagen_ruta=$7
-       WHERE id_almacen=$8`,
-      [nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta, id]
+       SET nombre = $1,
+           descripcion = $2,
+           categoria_id = $3,
+           subcategoria_id = $4,
+           stock = $5,
+           costo = $6,
+           fecha = $7,
+           imagen_ruta = $8
+       WHERE id_almacen = $9`,
+      [nombre, descripcion, categoria_id, subcategoria_id, stock, costo, fecha || new Date(), imagenFinal, id]
     );
 
-    res.json({ mensaje: "✏️ Producto actualizado correctamente" });
+    res.json({ mensaje: "✅ Producto actualizado correctamente" });
   } catch (err) {
     console.error("❌ Error al actualizar producto:", err);
     res.status(500).json({ error: "Error al actualizar producto" });

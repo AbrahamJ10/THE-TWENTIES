@@ -10,267 +10,110 @@
 <body>
 
   <!-- ===== ENCABEZADO ===== -->
-<header>
-  <div class="logo">
-    <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/logo.jpg" alt="Logo de la empresa">
-    <h1>THE TWENTIES</h1>
-  </div>
+  <header>
+    <div class="logo">
+      <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/logo.jpg" alt="Logo de la empresa">
+      <h1>THE TWENTIES</h1>
+    </div>
 
-  <nav>
-    <ul>
-      <li><a href="index.html" class="activo">Inicio</a></li>
-      <li><a href="productos.html">Productos</a></li>
-      <li><a href="contacto.html">Contacto</a></li>
-      <li><a href="login.html">Login</a></li>
-    </ul>
-  </nav>
-</header>
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="productos.html" class="activo">Productos</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
 
   <!-- ===== SECCIÓN PRODUCTOS ===== -->
   <section id="productos" class="nueva-coleccion">
     <div class="filtros">
       <div class="filtro-izquierda">
-        <select>
-          <option>Todas las categorías</option>
-          <option>Carteras</option>
-          <option>Joyas</option>
-          <option>Ropa</option>
+        <select id="filtroCategoria">
+          <option value="">Todas las categorías</option>
         </select>
       </div>
 
       <div class="filtro-derecha">
-        <input type="text" placeholder="🔍 Buscar por nombre o código">
+        <input type="text" id="buscador" placeholder="🔍 Buscar por nombre o descripción">
       </div>
     </div>
 
-    <div class="grid-coleccion">
-
-      <!-- ====== PRODUCTOS ====== -->
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/1.png" alt="Cartera de mano">
-        <div class="info">
-          <h3>Cartera de mano</h3>
-          <p>Código: CAR00001</p>
-          <p class="precio">S/ 652</p>
-          <button>LO QUIERO...</button>
-        </div>
-      </div>
-      
+    <div class="grid-coleccion" id="listaProductos"></div>
   </section>
 
-  <!-- ===== BOTÓN WHATSAPP ===== -->
-  <a href="https://wa.me/51999888777?text=¡Hola!%20Quiero%20más%20información%20sobre%20los%20productos%20de%20THE%20TWENTIES."
-     class="whatsapp-btn" target="_blank">
-     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-     Consultar
-  </a>
+  <script>
+    async function cargarProductos() {
+      try {
+        const res = await fetch("/api/almacen");
+        const productos = await res.json();
+
+        const contenedor = document.getElementById("listaProductos");
+        const selectCategoria = document.getElementById("filtroCategoria");
+        const buscador = document.getElementById("buscador");
+
+        // 🔹 Obtener categorías únicas
+        const categorias = [...new Set(productos.map(p => p.categoria).filter(c => c))];
+        categorias.forEach(cat => {
+          const option = document.createElement("option");
+          option.value = cat;
+          option.textContent = cat;
+          selectCategoria.appendChild(option);
+        });
+
+        // 🔹 Renderizar productos
+        function mostrarProductos(filtroCat = "", texto = "") {
+          contenedor.innerHTML = "";
+          const filtrados = productos.filter(p => {
+            const coincideCat = filtroCat ? p.categoria === filtroCat : true;
+            const coincideTexto = texto
+              ? p.nombre.toLowerCase().includes(texto.toLowerCase()) ||
+                p.descripcion.toLowerCase().includes(texto.toLowerCase())
+              : true;
+            return coincideCat && coincideTexto;
+          });
+
+          if (filtrados.length === 0) {
+            contenedor.innerHTML = "<p>No se encontraron productos.</p>";
+            return;
+          }
+
+          filtrados.forEach(p => {
+            const item = document.createElement("div");
+            item.classList.add("item");
+            item.innerHTML = `
+              <img src="${p.imagen_ruta || 'https://via.placeholder.com/200'}" alt="${p.nombre}">
+              <div class="info">
+                <h3>${p.nombre}</h3>
+                <p>${p.descripcion || ""}</p>
+                <p class="precio">S/ ${p.costo || 0}</p>
+                <button>LO QUIERO...</button>
+              </div>
+            `;
+            contenedor.appendChild(item);
+          });
+        }
+
+        // 🔹 Eventos de filtro y búsqueda
+        selectCategoria.addEventListener("change", () => {
+          mostrarProductos(selectCategoria.value, buscador.value);
+        });
+
+        buscador.addEventListener("input", () => {
+          mostrarProductos(selectCategoria.value, buscador.value);
+        });
+
+        // 🔹 Mostrar todos al inicio
+        mostrarProductos();
+
+      } catch (error) {
+        console.error("Error al cargar productos:", error);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", cargarProductos);
+  </script>
 
 </body>
 </html>

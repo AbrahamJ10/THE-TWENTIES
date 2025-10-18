@@ -61,29 +61,80 @@ nav ul li a.activo {
   transform: scale(1.1);
 }
 
-/* ===== FILTROS ===== */
+/* ===== FILTROS (Diseño moderno simétrico) ===== */
 .filtros {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 0 40px;
-  margin-bottom: 30px;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 15px;
+  background: #fff;
+  border-radius: 50px;
+  padding: 15px 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 30px auto 50px;
+  max-width: 1000px;
 }
 
-.filtro-izquierda select,
-.filtro-derecha input {
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+/* Campos de selección e input */
+.filtros select,
+.filtros input {
+  border: none;
+  background-color: #f9f9f9;
+  border-radius: 30px;
+  padding: 12px 20px;
   font-size: 15px;
-  outline: none;
+  color: #333;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  min-width: 200px;
 }
 
-.filtro-derecha input {
-  width: 230px;
-  max-width: 100%;
+.filtros select:focus,
+.filtros input:focus {
+  outline: none;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.3);
+}
+
+/* Botón principal */
+.filtros button {
+  background-color: #800000;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 25px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(128, 0, 0, 0.2);
+}
+
+.filtros button:hover {
+  background-color: #b30000;
+  transform: translateY(-2px);
+}
+
+/* Ícono dentro del botón (si usas FontAwesome o similar) */
+.filtros button i {
+  margin-right: 8px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .filtros {
+    flex-direction: column;
+    border-radius: 25px;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .filtros select,
+  .filtros input,
+  .filtros button {
+    width: 100%;
+  }
 }
 
 /* ===== PRODUCTOS ===== */
@@ -92,39 +143,57 @@ nav ul li a.activo {
   text-align: center;
 }
 
+/* Asegura que la cuadrícula esté centrada */
 .grid-coleccion {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 25px;
-  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* columnas iguales */
+  gap: 30px;
+  justify-content: center;
+  align-items: start; /* alinea la parte superior */
+  max-width: 1200px; /* limita ancho total */
+  margin: 0 auto; /* centra horizontalmente */
 }
 
+/* Cada producto */
 .item {
   background-color: #fff;
   border: 4px solid #f1f1f1;
-  width: 220px;
+  width: 100%; /* ocupa su celda completa */
   text-align: left;
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column; /* apila internamente */
+  justify-content: space-between; /* distribuye uniformemente */
+  height: 100%; /* hace que todos sean iguales */
 }
 
-.item:hover {
-  transform: scale(1.04);
-}
-
+/* Imagen con tamaño uniforme */
 .item img {
   width: 100%;
+  height: 220px; /* ajusta según el tamaño que desees */
+  object-fit: contain; /* 🔹 muestra toda la imagen completa sin recortar */
+  background-color: #fff; /* 🔹 color de fondo en caso de bordes vacíos */
   display: block;
+  padding: 10px; /* 🔹 pequeño margen interno para que no toque el borde */
+  box-sizing: border-box;
 }
 
+/* Información interna */
 .item .info {
   padding: 12px;
+  flex-grow: 1; /* ocupa todo el espacio disponible */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+/* Ajustes tipográficos */
 .item h3 {
   color: #333;
   font-size: 15px;
   margin-bottom: 5px;
+  min-height: 38px; /* asegura altura uniforme */
 }
 
 .item p {
@@ -151,10 +220,6 @@ nav ul li a.activo {
   margin-top: 8px;
   cursor: pointer;
   transition: background 0.3s;
-}
-
-.item button:hover {
-  background-color: #b30000;
 }
 
 /* ===== BOTÓN WHATSAPP ===== */

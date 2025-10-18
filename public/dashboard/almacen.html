@@ -12,6 +12,7 @@
       <li><a href="usuarios.html">Usuario</a></li>
       <li class="active">Almacén</li>
       <li><a href="configuracion.html">Configuración</a></li>
+      <li><button id="btnSalir" class="btn-salir">⎋ Salir</button></li>
     </ul>
   </aside>
 
@@ -72,5 +73,11 @@
       renderProductos(filtrados);
     });
   </script>
+  <script>
+  document.getElementById("btnSalir").addEventListener("click", () => {
+    window.location.href = "/index.html";
+  });
+</script>
+
 </body>
 </html>
