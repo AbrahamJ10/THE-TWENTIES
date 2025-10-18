@@ -3,13 +3,17 @@ body {
   display: flex;
   margin: 0;
   height: 100vh;
+  background-color: #fff;
+  flex-direction: row;
 }
 
+/* ===== MENÚ LATERAL ===== */
 .menu {
   width: 200px;
   background: #f2e5d5;
   padding: 20px;
   color: #800000;
+  border-right: 2px solid #d4af37;
 }
 
 .menu ul {
@@ -31,33 +35,63 @@ body {
   text-decoration: none;
 }
 
+/* ===== CONTENIDO PRINCIPAL ===== */
 main {
   flex-grow: 1;
-  padding: 30px;
+  padding: 40px 50px;
+  background: #fff;
 }
 
+main h1 {
+  margin-bottom: 20px;
+  color: #800000;
+}
+
+/* ===== TABLA ===== */
 table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 8px;
   width: 100%;
 }
 
 th, td {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 10px 12px;
   text-align: center;
+  vertical-align: middle;
 }
 
 th {
   background: #800000;
   color: white;
+  font-size: 15px;
 }
+
+td {
+  background-color: #fff8f0;
+}
+
+/* ===== FILTRO ===== */
+.filtro {
+  margin-bottom: 25px;
+}
+
+.filtro input {
+  padding: 10px 14px;
+  width: 300px;
+  border: 1px solid #D4AF37;
+  border-radius: 8px;
+  background-color: #fffdf6;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
 /* ===== BOTONES ===== */
 .btn {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border: 1px solid #D4AF37;
   background-color: white;
   color: #B8860B;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
@@ -82,65 +116,53 @@ th {
   background-color: #B33A3A;
   color: white;
 }
-/* ===== FILTRO Y BOTÓN AGREGAR ===== */
-.filtro {
-  margin-bottom: 15px;
-}
-
-.filtro input {
-  padding: 8px 12px;
-  width: 250px;
-  border: 1px solid #D4AF37;
-  border-radius: 6px;
-  background-color: #fff8f0;
-}
-
-.acciones {
-  margin-top: 15px;
-  text-align: right;
-}
 
 .btn.agregar {
-  background-color: #D4AF37;
+  background-color: #006400;
   color: white;
   border: none;
 }
 
 .btn.agregar:hover {
-  background-color: #b68c1f;
+  background-color: #058a05;
+}
+
+/* ===== BOTÓN AGREGAR ABAJO ===== */
+.acciones {
+  margin-top: 25px;
+  text-align: right;
 }
 
 /* ===== MODAL FLOTANTE ===== */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.4);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1000;
+  align-items: center;
+  z-index: 999;
 }
 
 .modal {
   background: #fff;
-  border-radius: 10px;
-  padding: 30px;
-  width: 480px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  border-radius: 12px;
+  padding: 30px 40px;
+  width: 500px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
   position: relative;
 }
 
 .modal h2 {
   text-align: center;
   color: #800000;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .modal form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px 15px;
+  gap: 14px 18px;
 }
 
 .modal label {
@@ -149,27 +171,25 @@ th {
   color: #800000;
 }
 
-.modal input {
+.modal input,
+.modal select {
   width: 100%;
-  padding: 6px 8px;
+  padding: 8px 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  background: #fff8f0;
 }
 
 .modal .acciones {
   grid-column: span 2;
   text-align: center;
-  margin-top: 15px;
-}
-
-.modal button {
-  margin: 0 10px;
+  margin-top: 20px;
 }
 
 .modal .cerrar {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 14px;
   background: #b33a3a;
   color: #fff;
   border: none;
@@ -178,5 +198,70 @@ th {
   height: 25px;
   cursor: pointer;
   font-weight: bold;
+  transition: all 0.2s;
 }
 
+.modal .cerrar:hover {
+  background: #800000;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet */
+@media (max-width: 992px) {
+  body {
+    flex-direction: column;
+  }
+
+  .menu {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid #d4af37;
+    text-align: center;
+  }
+
+  .menu ul {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  main {
+    padding: 20px 25px;
+  }
+
+  .modal {
+    width: 90%;
+  }
+}
+
+/* Móvil */
+@media (max-width: 600px) {
+  .filtro input {
+    width: 100%;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .modal form {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    width: 90%;
+    padding: 20px;
+  }
+
+  main h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .btn {
+    font-size: 13px;
+    padding: 7px 10px;
+  }
+}

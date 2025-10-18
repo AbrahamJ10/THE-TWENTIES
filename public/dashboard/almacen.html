@@ -18,89 +18,59 @@
   <main>
     <h1>Lista de productos</h1>
 
-    <!-- 🔍 Filtro de búsqueda -->
+    <!-- Filtro de búsqueda -->
     <div class="filtro">
-      <input type="text" id="buscarProducto" placeholder="Buscar por código o nombre...">
+      <input
+        type="text"
+        id="filtroProducto"
+        placeholder="Buscar por nombre, categoría o descripción..."
+      />
     </div>
 
+    <!-- Tabla de productos -->
     <table id="tablaAlmacen">
       <thead>
         <tr>
-          <th>Código</th>
-          <th>Fecha</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Categoría</th>
-          <th>Subcategoría</th>
-          <th>Stock</th>
-          <th>Costo</th>
-          <th>Imagen</th>
-          <th>Editar</th>
-          <th>Eliminar</th>
+          <th>COD</th>
+          <th>FECHA</th>
+          <th>NOMBRE</th>
+          <th>DESCRIPCIÓN</th>
+          <th>CATEGORÍA</th>
+          <th>SUBCATEGORÍA</th>
+          <th>STOCK</th>
+          <th>COSTO</th>
+          <th>IMAGEN</th>
+          <th>EDITAR</th>
+          <th>ELIMINAR</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
 
-    <!-- ➕ Botón Agregar -->
+    <!-- Botón debajo de la tabla -->
     <div class="acciones">
-      <button id="btnAgregarProducto" class="btn agregar">Agregar nuevo producto</button>
+      <button id="btnAgregarProducto" class="btn agregar">
+        + Agregar nuevo producto
+      </button>
     </div>
+
+    <!-- Contenedor del modal -->
+    <div id="modalContainer"></div>
   </main>
 
-  <!-- 💬 Modal flotante (se llenará dinámicamente con JS) -->
-  <div id="modalContainer"></div>
-
+  <script src="/js/almacen.js"></script>
   <script>
-    const tbody = document.querySelector('#tablaAlmacen tbody');
-    const inputBuscar = document.getElementById('buscarProducto');
-    let productos = [];
-
-    // 🔹 Cargar productos desde el servidor
-    fetch('/api/almacen')
-      .then(res => res.json())
-      .then(data => {
-        productos = data;
-        mostrarProductos(productos);
-      })
-      .catch(err => console.error("Error al cargar productos:", err));
-
-    // 🔹 Mostrar productos en la tabla
-    function mostrarProductos(lista) {
-      tbody.innerHTML = '';
-      lista.forEach(p => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${p.id_almacen}</td>
-          <td>${p.fecha}</td>
-          <td>${p.nombre}</td>
-          <td>${p.descripcion}</td>
-          <td>${p.categoria || ''}</td>
-          <td>${p.subcategoria || ''}</td>
-          <td>${p.stock}</td>
-          <td>S/ ${p.costo}</td>
-          <td>
-            ${p.imagen_ruta ? `<img src="/${p.imagen_ruta}" width="40" alt="imagen">` : '—'}
-          </td>
-          <td><button class="btn editar" data-id="${p.id_almacen}">Editar</button></td>
-          <td><button class="btn eliminar" data-id="${p.id_almacen}">Eliminar</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // 🔍 Filtrar productos
-    inputBuscar.addEventListener('input', e => {
-      const texto = e.target.value.toLowerCase();
-      const filtrados = productos.filter(p =>
-        p.nombre.toLowerCase().includes(texto) ||
-        p.id_almacen.toString().includes(texto)
+    // === FILTRO DE PRODUCTOS ===
+    const filtro = document.getElementById("filtroProducto");
+    filtro.addEventListener("input", () => {
+      const texto = filtro.value.toLowerCase();
+      const filtrados = productosCache.filter(p =>
+        (p.nombre || "").toLowerCase().includes(texto) ||
+        (p.descripcion || "").toLowerCase().includes(texto) ||
+        (p.categoria || "").toLowerCase().includes(texto)
       );
-      mostrarProductos(filtrados);
+      renderProductos(filtrados);
     });
   </script>
-
-  <!-- Script con las funciones CRUD -->
-  <script src="/js/almacen.js"></script>
 </body>
 </html>

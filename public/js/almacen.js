@@ -1,120 +1,239 @@
-const express = require("express");
-const path = require("path");
-const { Pool } = require("pg");
-const bcrypt = require("bcryptjs");
-const bodyParser = require("body-parser");
-require("dotenv").config();
+// public/js/almacen.js
+const API_ALMACEN = "/api/almacen";
+const tbody = document.querySelector("#tablaAlmacen tbody");
+const modalContainer = document.getElementById("modalContainer");
+const btnAgregar = document.getElementById("btnAgregarProducto");
 
-const app = express();
-const PORT = 3000;
+let productosCache = []; // cache local
 
-// 🔗 Conexión a Neon con variables .env
-const pool = new Pool({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  password: process.env.PGPASSWORD,
-  port: process.env.PGPORT,
-  ssl: { rejectUnauthorized: false },
-});
-
-// 📂 Middleware
-app.use(express.static(path.join(__dirname, "public"))); // Sirve todos los archivos en /public
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// 🧾 Ruta de login
-app.post("/login", async (req, res) => {
+// --- CARGAR y RENDERIZAR PRODUCTOS ---
+async function cargarProductos() {
   try {
-    const { usuario, password } = req.body;
-    if (!usuario || !password) {
-      return res.status(400).json({ message: "Faltan credenciales" });
-    }
-
-    const result = await pool.query("SELECT * FROM usuarios WHERE username = $1", [usuario]);
-    if (result.rows.length === 0) {
-      return res.status(401).json({ message: "Usuario no encontrado" });
-    }
-
-    const user = result.rows[0];
-
-    // 🔐 Comparación de contraseña (usa la versión según tu caso)
-    // Si las contraseñas NO están cifradas:
-    if (password !== user.password) {
-      return res.status(401).json({ message: "Contraseña incorrecta" });
-    }
-
-    // Si están cifradas con bcrypt, usa esto:
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) return res.status(401).json({ message: "Contraseña incorrecta" });
-
-    // 🔁 Redirección controlada
-    res.status(200).json({
-      message: "✅ Acceso permitido",
-      cargo_id: user.cargo_id,
-      redirect: "/dashboard/almacen.html" // redirección estándar
-    });
-
-  } catch (error) {
-    console.error("💥 Error en login:", error.message);
-    res.status(500).json({ message: "Error interno del servidor: " + error.message });
-  }
-});
-
-// 📋 Obtener lista de usuarios
-app.get("/api/usuarios", async (req, res) => {
-  try {
-    const result = await pool.query(`
-      SELECT u.usuario_id, u.nombre, u.apellido, u.correo, c.nombre_cargo AS cargo,
-             u.username, u.password
-      FROM usuarios u
-      JOIN cargos c ON u.cargo_id = c.cargo_id
-      ORDER BY u.usuario_id ASC
-    `);
-    res.json(result.rows);
+    const res = await fetch(API_ALMACEN);
+    if (!res.ok) throw new Error("Error al obtener productos");
+    const data = await res.json();
+    productosCache = data;
+    renderProductos(data);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error al obtener usuarios" });
+    console.error("cargarProductos:", err);
+    tbody.innerHTML = `<tr><td colspan="11">Error al cargar productos</td></tr>`;
   }
-});
+}
 
-// 📦 Obtener lista de productos (almacén)
-app.get("/api/almacen", async (req, res) => {
+function renderProductos(data) {
+  tbody.innerHTML = "";
+  if (!Array.isArray(data) || data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="11">No hay productos</td></tr>`;
+    return;
+  }
+
+  data.forEach(p => {
+    // usa las propiedades que tu backend devuelve: asumimos id_almacen, fecha, nombre, descripcion, categoria, subcategoria, stock, costo, imagen_ruta
+    const id = p.id_almacen;
+    const imgHtml = p.imagen_ruta ? `<img src="/${p.imagen_ruta}" width="40" alt="img">` : "—";
+    const tr = document.createElement("tr");
+    tr.dataset.id = id;
+    tr.innerHTML = `
+      <td>${id}</td>
+      <td>${p.fecha || ""}</td>
+      <td>${p.nombre || ""}</td>
+      <td>${p.descripcion || ""}</td>
+      <td>${p.categoria || ""}</td>
+      <td>${p.subcategoria || ""}</td>
+      <td>${p.stock ?? ""}</td>
+      <td>${p.costo ?? ""}</td>
+      <td>${imgHtml}</td>
+      <td><button class="btn editar" data-id="${id}">✏️</button></td>
+      <td><button class="btn eliminar" data-id="${id}">🗑️</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// --- ABRIR MODAL (AGREGAR / EDITAR) ---
+async function abrirModal(producto = null) {
+  const isEdit = !!producto;
+
+  // 🔹 Cargar categorías y subcategorías desde el backend
+let categorias = [];
+let subcategorias = [];
+
+try {
+  const [resCat, resSub] = await Promise.all([
+    fetch("/api/categorias"),
+    fetch("/api/subcategorias")
+  ]);
+
+  if (resCat.ok) categorias = await resCat.json();
+  if (resSub.ok) subcategorias = await resSub.json();
+} catch (err) {
+  console.error("❌ Error cargando categorías o subcategorías:", err);
+}
+
+  // Generar opciones dinámicas
+  const opcionesCategoria = categorias.map(c =>
+    `<option value="${c.categoria_id}" ${producto?.categoria_id == c.categoria_id ? "selected" : ""}>
+      ${c.nombre_categoria}
+    </option>`
+  ).join("");
+
+  const opcionesSubcategoria = subcategorias.map(s =>
+    `<option value="${s.subcategoria_id}" ${producto?.subcategoria_id == s.subcategoria_id ? "selected" : ""}>
+      ${s.nombre_subcategoria}
+    </option>`
+  ).join("");
+
+  // 🔹 Modal HTML
+  modalContainer.innerHTML = `
+    <div class="modal-overlay">
+      <div class="modal">
+        <button class="cerrar" id="modalCerrar">×</button>
+        <h2>${isEdit ? "Editar producto" : "Agregar producto"}</h2>
+        <form id="formProducto" enctype="multipart/form-data">
+
+          <!-- Código deshabilitado -->
+          <div>
+            <label>Código (ID)</label>
+            <input name="id_almacen" value="${producto?.id_almacen || ''}" disabled>
+          </div>
+
+          <div><label>Fecha</label><input name="fecha" type="date" value="${producto?.fecha || ''}"></div>
+          <div><label>Nombre</label><input name="nombre" value="${producto?.nombre || ''}" required></div>
+          <div><label>Descripción</label><input name="descripcion" value="${producto?.descripcion || ''}"></div>
+
+          <!-- Select de Categoría -->
+          <div>
+            <label>Categoría</label>
+            <select name="categoria_id" required>
+              <option value="">-- Selecciona una categoría --</option>
+              ${opcionesCategoria}
+            </select>
+          </div>
+
+          <!-- Select de Subcategoría -->
+          <div>
+            <label>Subcategoría</label>
+            <select name="subcategoria_id">
+              <option value="">-- Selecciona una subcategoría --</option>
+              ${opcionesSubcategoria}
+            </select>
+          </div>
+
+          <div><label>Stock</label><input name="stock" type="number" value="${producto?.stock ?? 0}"></div>
+          <div><label>Costo</label><input name="costo" type="number" step="0.01" value="${producto?.costo ?? 0}"></div>
+
+          <div>
+            <label>Imagen (nuevo archivo)</label>
+            <input type="file" name="imagen" id="inputImagen" accept="image/*">
+          </div>
+
+          <div id="previewContainer">
+            ${
+              producto && producto.imagen_ruta
+                ? `<p>Imagen actual:</p><img src="/${producto.imagen_ruta}" id="previewImg" width="80">`
+                : `<img id="previewImg" style="display:none;" width="80">`
+            }
+          </div>
+
+          <div class="acciones" style="margin-top:12px;">
+            <button type="submit" class="btn agregar">${isEdit ? 'Guardar cambios' : 'Agregar'}</button>
+            <button type="button" class="btn eliminar" id="btnCancelar">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+
+  // === EVENTOS DE MODAL ===
+  document.getElementById("modalCerrar").onclick = cerrarModal;
+  document.getElementById("btnCancelar").onclick = cerrarModal;
+
+  const inputImagen = document.getElementById("inputImagen");
+  const previewImg = document.getElementById("previewImg");
+  inputImagen.addEventListener("change", () => {
+    const file = inputImagen.files[0];
+    if (!file) {
+      previewImg.style.display = 'none';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = e => {
+      previewImg.src = e.target.result;
+      previewImg.style.display = 'inline-block';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const form = document.getElementById("formProducto");
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    fd.delete("id_almacen");
+
+    const url = isEdit ? `${API_ALMACEN}/${producto.id_almacen}` : API_ALMACEN;
+    const method = isEdit ? "PUT" : "POST";
+
+    try {
+      const res = await fetch(url, { method, body: fd });
+      if (!res.ok) {
+        const err = await res.json().catch(()=>({error:'error'}));
+        throw new Error(err.error || 'Error guardando producto');
+      }
+      const json = await res.json();
+      alert(json.mensaje || (isEdit ? "Producto actualizado" : "Producto agregado"));
+      cerrarModal();
+      cargarProductos();
+    } catch (err) {
+      console.error("guardar producto:", err);
+      alert("Error al guardar producto, revisa consola.");
+    }
+  };
+}
+
+
+
+function cerrarModal() {
+  modalContainer.innerHTML = "";
+}
+
+// --- ELIMINAR PRODUCTO ---
+async function eliminarProducto(id) {
+  if (!confirm("¿Eliminar este producto?")) return;
   try {
-    const result = await pool.query(`
-      SELECT a.id_almacen, a.fecha, a.nombre, a.descripcion,
-             cat.nombre_categoria AS categoria, sub.nombre_subcategoria AS subcategoria,
-             a.stock, a.costo, a.imagen_ruta
-      FROM almacen a
-      LEFT JOIN categorias cat ON a.categoria_id = cat.categoria_id
-      LEFT JOIN subcategorias sub ON a.subcategoria_id = sub.subcategoria_id
-      ORDER BY a.id_almacen ASC
-    `);
-    res.json(result.rows);
+    const res = await fetch(`${API_ALMACEN}/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Error en DELETE");
+    const json = await res.json();
+    alert(json.mensaje || "Eliminado correctamente");
+    cargarProductos();
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error al obtener productos" });
+    console.error("eliminarProducto:", err);
+    alert("No se pudo eliminar. Revisa la consola del servidor.");
+  }
+}
+
+// --- DELEGACIÓN DE EVENTOS EN TBODY (Editar / Eliminar) ---
+tbody.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+
+  if (btn.classList.contains("editar")) {
+    const id = btn.dataset.id;
+    const producto = productosCache.find(p => p.id_almacen == id);
+    if (!producto) {
+      alert("Producto no encontrado en cache");
+      return;
+    }
+    abrirModal(producto);
+  }
+
+  if (btn.classList.contains("eliminar")) {
+    const id = btn.dataset.id;
+    eliminarProducto(id);
   }
 });
 
-// ⚙️ Obtener configuración (cargos, categorías y subcategorías)
-app.get("/api/configuracion", async (req, res) => {
-  try {
-    const cargos = await pool.query("SELECT * FROM cargos ORDER BY cargo_id");
-    const categorias = await pool.query("SELECT * FROM categorias ORDER BY categoria_id");
-    const subcategorias = await pool.query("SELECT * FROM subcategorias ORDER BY subcategoria_id");
-    res.json({
-      cargos: cargos.rows,
-      categorias: categorias.rows,
-      subcategorias: subcategorias.rows,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error al obtener configuraciones" });
-  }
-});
+// boton agregar (está en la tabla header)
+btnAgregar.addEventListener("click", () => abrirModal(null));
 
-// 🚀 Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-});
+// iniciar
+cargarProductos();

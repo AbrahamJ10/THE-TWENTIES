@@ -7,13 +7,14 @@ const path = require("path");
 const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
 const bodyParser = require("body-parser");
+const multer = require("multer");
 require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ============================================================
-// 🔗 Conexión a Neon (sin bloquear el arranque del servidor)
+// 🔗 Conexión a Neon
 // ============================================================
 const pool = new Pool({
   user: process.env.PGUSER,
@@ -24,7 +25,6 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-// Conectar en segundo plano (no bloquea Express)
 pool.connect()
   .then(() => console.log("✅ Conectado a PostgreSQL (Neon)"))
   .catch(err => console.error("❌ Error al conectar a PostgreSQL:", err.message));
@@ -37,11 +37,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // ============================================================
-// ❤️ Ruta rápida para Render (evita pantalla negra)
+// ❤️ Health Check
 // ============================================================
-app.get("/health", (req, res) => {
-  res.status(200).send("OK");
-});
+app.get("/health", (req, res) => res.status(200).send("OK"));
 
 // ============================================================
 // 🔐 LOGIN
@@ -61,15 +59,9 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Usuario no encontrado" });
 
     const user = result.rows[0];
-
-    // Si las contraseñas NO están cifradas:
     if (password !== user.password) {
       return res.status(401).json({ message: "Contraseña incorrecta" });
     }
-
-    // Si usas bcrypt, descomenta esto:
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) return res.status(401).json({ message: "Contraseña incorrecta" });
 
     res.status(200).json({
       message: "✅ Acceso permitido",
@@ -78,27 +70,54 @@ app.post("/login", async (req, res) => {
     });
   } catch (error) {
     console.error("💥 Error en login:", error.message);
-    res.status(500).json({ message: "Error interno del servidor: " + error.message });
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 });
 
 // ============================================================
-// 📦 CRUD DEL ALMACÉN
+// 📸 Configuración de subida de imágenes con Multer
+// ============================================================
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "public", "uploads"));
+  },
+  filename: (req, file, cb) => {
+    const nombreUnico = Date.now() + "-" + file.originalname.replace(/\s+/g, "_");
+    cb(null, nombreUnico);
+  },
+});
+
+const upload = multer({ storage });
+
+// ✅ Ruta pública para imágenes
+app.use("/uploads", express.static(path.join(__dirname, "public", "uploads")));
+
+// ============================================================
+// 📦 CRUD DEL ALMACÉN (con soporte de imagen)
 // ============================================================
 
 // 🔹 Obtener productos
 app.get("/api/almacen", async (req, res) => {
   try {
-    const result = await pool.query(`
-      SELECT a.id_almacen, a.fecha, a.nombre, a.descripcion,
-             cat.nombre_categoria AS categoria,
-             sub.nombre_subcategoria AS subcategoria,
-             a.stock, a.costo, a.imagen_ruta
+    const query = `
+      SELECT 
+        a.id_almacen,
+        a.fecha,
+        a.nombre,
+        a.descripcion,
+        a.stock,
+        a.costo,
+        a.imagen_ruta,
+        c.categoria_id,
+        c.nombre_categoria AS categoria,
+        s.subcategoria_id,
+        s.nombre_subcategoria AS subcategoria
       FROM almacen a
-      LEFT JOIN categorias cat ON a.categoria_id = cat.categoria_id
-      LEFT JOIN subcategorias sub ON a.subcategoria_id = sub.subcategoria_id
-      ORDER BY a.id_almacen ASC
-    `);
+      LEFT JOIN categorias c ON a.categoria_id = c.categoria_id
+      LEFT JOIN subcategorias s ON a.subcategoria_id = s.subcategoria_id
+      ORDER BY a.id_almacen ASC;
+    `;
+    const result = await pool.query(query);
     res.json(result.rows);
   } catch (err) {
     console.error("❌ Error al obtener productos:", err);
@@ -106,15 +125,18 @@ app.get("/api/almacen", async (req, res) => {
   }
 });
 
-// 🔹 Agregar producto
-app.post("/api/almacen", async (req, res) => {
+// 🔹 Agregar producto (con imagen)
+app.post("/api/almacen", upload.single("imagen"), async (req, res) => {
   try {
-    const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta } = req.body;
+    const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo } = req.body;
+    const imagen_ruta = req.file ? `uploads/${req.file.filename}` : null;
+
     await pool.query(
       `INSERT INTO almacen (nombre, descripcion, categoria_id, subcategoria_id, stock, costo, fecha, imagen_ruta)
        VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7)`,
       [nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta]
     );
+
     res.json({ mensaje: "✅ Producto agregado correctamente" });
   } catch (err) {
     console.error("❌ Error al agregar producto:", err);
@@ -122,17 +144,20 @@ app.post("/api/almacen", async (req, res) => {
   }
 });
 
-// 🔹 Editar producto
-app.put("/api/almacen/:id", async (req, res) => {
+// 🔹 Editar producto (imagen opcional)
+app.put("/api/almacen/:id", upload.single("imagen"), async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta } = req.body;
+    const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo } = req.body;
+    const imagen_ruta = req.file ? `uploads/${req.file.filename}` : req.body.imagen_ruta || null;
+
     await pool.query(
       `UPDATE almacen
        SET nombre=$1, descripcion=$2, categoria_id=$3, subcategoria_id=$4, stock=$5, costo=$6, imagen_ruta=$7
        WHERE id_almacen=$8`,
       [nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta, id]
     );
+
     res.json({ mensaje: "✏️ Producto actualizado correctamente" });
   } catch (err) {
     console.error("❌ Error al actualizar producto:", err);
@@ -153,12 +178,14 @@ app.delete("/api/almacen/:id", async (req, res) => {
 });
 
 // ============================================================
-// 👤 CRUD DE USUARIOS
+// 👤 CRUD COMPLETO DE USUARIOS
 // ============================================================
+
+// 🔹 Obtener usuarios
 app.get("/api/usuarios", async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT u.usuario_id, u.nombre, u.apellido, u.correo,
+      SELECT u.usuario_id, u.nombre, u.apellido, u.correo, 
              c.nombre_cargo AS cargo, u.username, u.password
       FROM usuarios u
       JOIN cargos c ON u.cargo_id = c.cargo_id
@@ -166,8 +193,140 @@ app.get("/api/usuarios", async (req, res) => {
     `);
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error("❌ Error al obtener usuarios:", err);
     res.status(500).json({ error: "Error al obtener usuarios" });
+  }
+});
+
+// ➕ Agregar usuario
+app.post("/api/usuarios", async (req, res) => {
+  try {
+    const { nombre, apellido, correo, cargo_id, username, password } = req.body;
+    await pool.query(
+      `INSERT INTO usuarios (nombre, apellido, correo, cargo_id, username, password)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [nombre, apellido, correo, cargo_id, username, password]
+    );
+    res.json({ mensaje: "✅ Usuario agregado correctamente" });
+  } catch (err) {
+    console.error("❌ Error al agregar usuario:", err);
+    res.status(500).json({ error: "Error al agregar usuario" });
+  }
+});
+
+// ✏️ Editar usuario
+app.put("/api/usuarios/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, apellido, correo, cargo_id, username, password } = req.body;
+
+    await pool.query(
+      `UPDATE usuarios
+       SET nombre=$1, apellido=$2, correo=$3, cargo_id=$4, username=$5, password=$6
+       WHERE usuario_id=$7`,
+      [nombre, apellido, correo, cargo_id, username, password, id]
+    );
+
+    res.json({ mensaje: "✏️ Usuario actualizado correctamente" });
+  } catch (err) {
+    console.error("❌ Error al actualizar usuario:", err);
+    res.status(500).json({ error: "Error al actualizar usuario" });
+  }
+});
+
+
+
+// 🗑️ Eliminar usuario
+app.delete("/api/usuarios/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await pool.query("DELETE FROM usuarios WHERE usuario_id=$1", [id]);
+    res.json({ mensaje: "🗑️ Usuario eliminado correctamente" });
+  } catch (err) {
+    console.error("❌ Error al eliminar usuario:", err);
+    res.status(500).json({ error: "Error al eliminar usuario" });
+  }
+});
+
+// ============================================================
+// ⚙️ CONFIGURACIÓN (CARGOS, CATEGORÍAS, SUBCATEGORÍAS)
+// ============================================================
+
+// 🔹 Obtener CARGOS
+app.get("/api/cargos", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM cargos ORDER BY cargo_id ASC");
+    res.json(result.rows);
+  } catch (err) {
+    console.error("❌ Error al obtener cargos:", err);
+    res.status(500).json({ error: "Error al obtener cargos" });
+  }
+});
+
+// 🔹 Obtener CATEGORÍAS
+app.get("/api/categorias", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM categorias ORDER BY categoria_id ASC");
+    res.json(result.rows);
+  } catch (err) {
+    console.error("❌ Error al obtener categorías:", err);
+    res.status(500).json({ error: "Error al obtener categorías" });
+  }
+});
+
+// 🔹 Obtener SUBCATEGORÍAS
+app.get("/api/subcategorias", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM subcategorias ORDER BY subcategoria_id ASC");
+    res.json(result.rows);
+  } catch (err) {
+    console.error("❌ Error al obtener subcategorías:", err);
+    res.status(500).json({ error: "Error al obtener subcategorías" });
+  }
+});
+
+// 🔹 Agregar registro (Cargo / Categoría / Subcategoría)
+app.post("/api/:tipo", async (req, res) => {
+  try {
+    const { tipo } = req.params;
+    const { nombre } = req.body;
+
+    const tablas = {
+      cargos: { tabla: "cargos", columna: "nombre_cargo" },
+      categorias: { tabla: "categorias", columna: "nombre_categoria" },
+      subcategorias: { tabla: "subcategorias", columna: "nombre_subcategoria" },
+    };
+
+    const info = tablas[tipo];
+    if (!info) return res.status(400).json({ error: "Tipo no válido" });
+
+    await pool.query(`INSERT INTO ${info.tabla} (${info.columna}) VALUES ($1)`, [nombre]);
+    res.json({ mensaje: "✅ Registro agregado correctamente" });
+  } catch (err) {
+    console.error("❌ Error al agregar registro:", err);
+    res.status(500).json({ error: "Error al agregar registro" });
+  }
+});
+
+// 🔹 Eliminar registro
+app.delete("/api/:tipo/:id", async (req, res) => {
+  try {
+    const { tipo, id } = req.params;
+
+    const tablas = {
+      cargos: { tabla: "cargos", id: "cargo_id" },
+      categorias: { tabla: "categorias", id: "categoria_id" },
+      subcategorias: { tabla: "subcategorias", id: "subcategoria_id" },
+    };
+
+    const info = tablas[tipo];
+    if (!info) return res.status(400).json({ error: "Tipo no válido" });
+
+    await pool.query(`DELETE FROM ${info.tabla} WHERE ${info.id} = $1`, [id]);
+    res.json({ mensaje: "🗑️ Registro eliminado correctamente" });
+  } catch (err) {
+    console.error("❌ Error al eliminar registro:", err);
+    res.status(500).json({ error: "Error al eliminar registro" });
   }
 });
 
@@ -178,13 +337,13 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ✅ Manejo de rutas desconocidas (SPA o refresh)
+// ✅ Fallback SPA
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // ============================================================
-// 🚀 Iniciar servidor (responde instantáneamente)
+// 🚀 Iniciar servidor
 // ============================================================
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
