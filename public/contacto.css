@@ -17,7 +17,7 @@ header {
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  flex-wrap: wrap; /* ✅ para que se ajuste en pantallas pequeñas */
+  flex-wrap: wrap;
 }
 
 .logo {
@@ -167,94 +167,6 @@ nav ul li a.activo {
   margin-top: 10px;
 }
 
-/* ===== BOTÓN WHATSAPP ===== */
-.whatsapp-btn {
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-  background-color: #25D366;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
-  padding: 10px 18px;
-  border-radius: 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  text-decoration: none;
-  transition: transform 0.3s ease;
-}
-
-.whatsapp-btn:hover {
-  transform: scale(1.05);
-  background-color: #20ba5a;
-}
-
-.whatsapp-btn img {
-  width: 25px;
-  height: 25px;
-}
-
-/* ===== RESPONSIVE ===== */
-
-/* Tablets (hasta 900px) */
-@media (max-width: 900px) {
-  header {
-    padding: 10px 25px;
-  }
-
-  nav ul {
-    justify-content: center;
-    gap: 15px;
-  }
-
-  .contacto {
-    padding: 40px 25px;
-  }
-
-  .contenedor-contacto {
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-  }
-
-  .formulario,
-  .info {
-    width: 90%;
-  }
-}
-
-/* Celulares (hasta 600px) */
-@media (max-width: 600px) {
-  .logo img {
-    height: 45px;
-    margin-right: 10px;
-  }
-
-  .logo h1 {
-    font-size: 22px;
-  }
-
-  nav ul li a {
-    font-size: 16px;
-  }
-
-  .contacto h2 {
-    font-size: 24px;
-  }
-
-  .descripcion {
-    font-size: 14px;
-  }
-
-  .formulario {
-    padding: 20px;
-  }
-
-  .info {
-    padding: 20px;
-  }
-}
 /* ===== REDES SOCIALES ===== */
 .redes-centrales {
   display: flex;
@@ -262,7 +174,7 @@ nav ul li a.activo {
   align-items: center;
   gap: 80px;
   flex-wrap: wrap;
-  margin: 100px 0; /* separa del encabezado y del mapa */
+  margin: 100px 0;
 }
 
 .redes-centrales a {
@@ -309,8 +221,73 @@ nav ul li a.activo {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== BOTÓN WHATSAPP ===== */
+.whatsapp-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: #25D366;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-btn:hover {
+  transform: scale(1.05);
+  background-color: #20ba5a;
+}
+
+.whatsapp-btn img {
+  width: 25px;
+  height: 25px;
+}
+
+/* ===== RESPONSIVE UNIVERSAL ===== */
+
+/* --- Tablets (hasta 900px) --- */
 @media (max-width: 900px) {
+  header {
+    padding: 10px 25px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  .logo h1 {
+    font-size: 24px;
+  }
+
+  nav ul {
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .contacto {
+    padding: 40px 25px;
+  }
+
+  .contenedor-contacto {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .formulario,
+  .info {
+    width: 90%;
+  }
+
   .redes-centrales {
     gap: 40px;
     margin: 60px 0;
@@ -329,5 +306,69 @@ nav ul li a.activo {
   .ubicacion iframe {
     width: 95%;
     height: 300px;
+  }
+}
+
+/* --- Celulares (hasta 600px) --- */
+@media (max-width: 600px) {
+  header {
+    padding: 10px 15px;
+  }
+
+  .logo img {
+    height: 40px;
+    margin-right: 8px;
+  }
+
+  .logo h1 {
+    font-size: 20px;
+  }
+
+  nav ul li a {
+    font-size: 16px;
+  }
+
+  .contacto h2 {
+    font-size: 24px;
+  }
+
+  .descripcion {
+    font-size: 14px;
+  }
+
+  .formulario,
+  .info {
+    padding: 20px;
+  }
+
+  .redes-centrales {
+    gap: 30px;
+  }
+
+  .redes-centrales a {
+    width: 90px;
+    height: 90px;
+  }
+
+  .redes-centrales img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .ubicacion iframe {
+    width: 95%;
+    height: 250px;
+  }
+
+  .whatsapp-btn {
+    bottom: 15px;
+    right: 15px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .whatsapp-btn img {
+    width: 22px;
+    height: 22px;
   }
 }

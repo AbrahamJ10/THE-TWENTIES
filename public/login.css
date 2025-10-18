@@ -17,7 +17,7 @@ header {
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  flex-wrap: wrap; /* ✅ permite adaptarse en pantallas pequeñas */
+  flex-wrap: wrap; /* ✅ adapta a pantallas pequeñas */
 }
 
 .logo {
@@ -65,7 +65,10 @@ nav ul li a.activo {
   display: flex;
   height: calc(100vh - 90px);
   background-color: white;
-  flex-wrap: wrap; /* ✅ adapta el layout si no hay espacio */
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
 }
 
 /* Lado izquierdo (logo) */
@@ -77,6 +80,7 @@ nav ul li a.activo {
   align-items: center;
   border-right: 2px solid #F2E5D5;
   padding: 30px;
+  min-width: 300px;
 }
 
 .login-left img {
@@ -94,6 +98,7 @@ nav ul li a.activo {
   align-items: center;
   background-color: white;
   padding: 20px;
+  min-width: 300px;
 }
 
 .form-login {
@@ -152,60 +157,100 @@ nav ul li a.activo {
   background-color: #b30000;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE UNIVERSAL ===== */
 
-/* Tablets medianas (hasta 900px) */
+/* --- Tablets (hasta 900px) --- */
 @media (max-width: 900px) {
   header {
     padding: 10px 25px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  .logo h1 {
+    font-size: 24px;
   }
 
   nav ul {
     justify-content: center;
     gap: 15px;
+    flex-wrap: wrap;
   }
 
-  .login-container {
+  .grid-coleccion {
+    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .item {
+    width: 100%;
+  }
+
+  .filtros {
     flex-direction: column;
-    height: auto;
+    align-items: center;
+    padding: 20px;
+    gap: 12px;
   }
 
-  .login-left {
-    border-right: none;
-    border-bottom: 2px solid #F2E5D5;
-    padding: 30px 0;
-  }
-
-  .login-right {
-    padding: 30px 15px;
-  }
-
-  .form-login {
+  .formulario,
+  .info {
     width: 90%;
-    margin: 30px auto;
+  }
+
+  .footer-twenties {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
   }
 }
 
-/* Celulares pequeños (hasta 600px) */
+/* --- Celulares (hasta 600px) --- */
 @media (max-width: 600px) {
+  header {
+    padding: 10px 15px;
+  }
+
   .logo img {
-    height: 45px;
-    margin-right: 10px;
+    height: 40px;
+    margin-right: 8px;
   }
 
   .logo h1 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   nav ul li a {
     font-size: 16px;
   }
 
-  .form-login {
-    padding: 25px;
+  .grid-coleccion {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
   }
 
-  .form-login h2 {
-    font-size: 20px;
+  .item img {
+    height: 180px;
+  }
+
+  .whatsapp-btn {
+    bottom: 15px;
+    right: 15px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .footer-twenties img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .footer-twenties h3 {
+    font-size: 12px;
   }
 }

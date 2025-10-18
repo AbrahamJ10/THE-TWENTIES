@@ -355,84 +355,101 @@ nav ul li a:hover {
   transform: scale(1.2);
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* ===== RESPONSIVE UNIVERSAL ===== */
 
-/* Tablets */
-@media (max-width: 1024px) {
+/* --- Tablets (hasta 900px) --- */
+@media (max-width: 900px) {
   header {
+    padding: 10px 25px;
     flex-direction: column;
-    gap: 10px;
-    padding: 10px 30px;
+    text-align: center;
+  }
+
+  .logo img {
+    height: 50px;
   }
 
   .logo h1 {
-    font-size: 22px;
+    font-size: 24px;
   }
 
-  .carrusel {
-    height: 350px;
-  }
-
-  .info-empresa {
-    padding: 40px;
-  }
-
-  .nueva-coleccion {
-    padding: 30px;
-  }
-
-  .footer-twenties {
-    padding: 30px;
-  }
-}
-
-/* Móviles */
-@media (max-width: 600px) {
   nav ul {
-    flex-direction: column;
-    gap: 10px;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
   }
 
-  .carrusel {
-    height: 250px;
-  }
-
-  .contenedor-info {
-    flex-direction: column;
-    gap: 30px;
-  }
-
-  .logo-grande {
-    width: 200px;
-  }
-
-  .texto-info p {
-    max-width: 100%;
-    font-size: 14px;
+  .grid-coleccion {
+    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
   .item {
-    width: 90%;
+    width: 100%;
   }
 
-  .nueva-coleccion {
+  .filtros {
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
+    gap: 12px;
+  }
+
+  .formulario,
+  .info {
+    width: 90%;
   }
 
   .footer-twenties {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 25px;
-  }
-
-  .footer-right {
-    align-items: center;
-  }
-
-  .footer-top, .footer-bottom {
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
+    padding: 30px 20px;
   }
 }
+
+/* --- Celulares (hasta 600px) --- */
+@media (max-width: 600px) {
+  header {
+    padding: 10px 15px;
+  }
+
+  .logo img {
+    height: 40px;
+    margin-right: 8px;
+  }
+
+  .logo h1 {
+    font-size: 20px;
+  }
+
+  nav ul li a {
+    font-size: 16px;
+  }
+
+  .grid-coleccion {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+  }
+
+  .item img {
+    height: 180px;
+  }
+
+  .whatsapp-btn {
+    bottom: 15px;
+    right: 15px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .footer-twenties img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .footer-twenties h3 {
+    font-size: 12px;
+  }
+}
+

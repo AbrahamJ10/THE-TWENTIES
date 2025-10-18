@@ -1,3 +1,4 @@
+/* ===== ESTILOS GENERALES ===== */
 body {
   font-family: 'Segoe UI', sans-serif;
   display: flex;
@@ -5,24 +6,36 @@ body {
   height: 100vh;
   background-color: #fff;
   flex-direction: row;
+  color: #333;
 }
 
 /* ===== MENÚ LATERAL ===== */
 .menu {
-  width: 200px;
+  width: 220px;
   background: #f2e5d5;
-  padding: 20px;
+  padding: 25px;
   color: #800000;
   border-right: 2px solid #d4af37;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu h2 {
+  margin-bottom: 25px;
+  color: #800000;
 }
 
 .menu ul {
   list-style: none;
   padding: 0;
+  margin: 0;
+  width: 100%;
 }
 
 .menu li {
   padding: 10px 0;
+  text-align: center;
 }
 
 .menu li.active {
@@ -33,6 +46,33 @@ body {
 .menu a {
   color: #800000;
   text-decoration: none;
+  display: block;
+  width: 100%;
+  transition: 0.3s;
+}
+
+.menu a:hover {
+  background-color: #e8d5c2;
+  border-radius: 8px;
+}
+
+/* ===== BOTÓN SALIR ===== */
+.btn-salir {
+  margin-top: auto;
+  width: 100%;
+  background: #b33a3a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.btn-salir:hover {
+  background: #800000;
+  transform: scale(1.05);
 }
 
 /* ===== CONTENIDO PRINCIPAL ===== */
@@ -40,11 +80,14 @@ main {
   flex-grow: 1;
   padding: 40px 50px;
   background: #fff;
+  overflow-y: auto;
 }
 
 main h1 {
   margin-bottom: 20px;
   color: #800000;
+  font-size: 28px;
+  text-align: left;
 }
 
 /* ===== TABLA ===== */
@@ -207,7 +250,7 @@ td {
 
 /* ===== RESPONSIVE ===== */
 
-/* Tablet */
+/* ✅ Tablets medianas (hasta 992px) */
 @media (max-width: 992px) {
   body {
     flex-direction: column;
@@ -218,24 +261,43 @@ td {
     border-right: none;
     border-bottom: 2px solid #d4af37;
     text-align: center;
+    padding: 15px;
   }
 
   .menu ul {
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
   }
 
   main {
-    padding: 20px 25px;
+    padding: 25px 20px;
   }
 
   .modal {
     width: 90%;
   }
+
+  main h1 {
+    text-align: center;
+  }
+
+  .acciones {
+    text-align: center;
+  }
 }
 
-/* Móvil */
+/* ✅ Celulares pequeños (hasta 600px) */
 @media (max-width: 600px) {
+  .menu {
+    padding: 10px;
+  }
+
+  .menu ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .filtro input {
     width: 100%;
   }
@@ -264,23 +326,9 @@ td {
     font-size: 13px;
     padding: 7px 10px;
   }
-}
 
-/* ===== BOTÓN SALIR ===== */
-.btn-salir {
-  margin-top: 15px;
-  width: 100%;
-  background: #b33a3a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s;
-}
-
-.btn-salir:hover {
-  background: #800000;
-  transform: scale(1.05);
+  .btn-salir {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
