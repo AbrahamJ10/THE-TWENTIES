@@ -51,7 +51,6 @@ function renderProductos(data) {
       <td>${p.nombre || ""}</td>
       <td>${p.descripcion || ""}</td>
       <td>${p.categoria || ""}</td>
-      <td>${p.subcategoria || ""}</td>
       <td>${p.stock ?? ""}</td>
       <td>${p.costo ?? ""}</td>
       <td>${imgHtml}</td>
@@ -66,17 +65,13 @@ function renderProductos(data) {
 async function abrirModal(producto = null) {
   const isEdit = !!producto;
 
-  // 🔹 Cargar categorías y subcategorías desde el backend
+  // 🔹 Cargar categorías desde el backend
   let categorias = [];
-  let subcategorias = [];
-
   try {
-    const [resCat, resSub] = await Promise.all([fetch("/api/categorias")]);
-
+    const resCat = await fetch("/api/categorias");
     if (resCat.ok) categorias = await resCat.json();
-    if (resSub.ok) subcategorias = await resSub.json();
   } catch (err) {
-    console.error("❌ Error cargando categorías :", err);
+    console.error("❌ Error cargando categorías:", err);
   }
 
   // Generar opciones dinámicas
@@ -85,20 +80,7 @@ async function abrirModal(producto = null) {
       (c) =>
         `<option value="${c.categoria_id}" ${
           producto?.categoria_id == c.categoria_id ? "selected" : ""
-        }>
-      ${c.nombre_categoria}
-    </option>`
-    )
-    .join("");
-
-  const opcionesSubcategoria = subcategorias
-    .map(
-      (s) =>
-        `<option value="${s.subcategoria_id}" ${
-          producto?.subcategoria_id == s.subcategoria_id ? "selected" : ""
-        }>
-      ${s.nombre_subcategoria}
-    </option>`
+        }>${c.nombre_categoria}</option>`
     )
     .join("");
 
@@ -110,7 +92,6 @@ async function abrirModal(producto = null) {
         <h2>${isEdit ? "Editar producto" : "Agregar producto"}</h2>
         <form id="formProducto" enctype="multipart/form-data">
 
-          <!-- Código deshabilitado -->
           <div>
             <label>Código (ID)</label>
             <input name="id_almacen" value="${
@@ -118,17 +99,21 @@ async function abrirModal(producto = null) {
             }" disabled>
           </div>
 
-          <div><label>Fecha</label><input name="fecha" type="date" value="${
-            producto?.fecha || ""
-          }"></div>
-          <div><label>Nombre</label><input name="nombre" value="${
-            producto?.nombre || ""
-          }" required></div>
-          <div><label>Descripción</label><input name="descripcion" value="${
-            producto?.descripcion || ""
-          }"></div>
+          <div>
+            <label>Fecha</label>
+            <input name="fecha" type="date" value="${producto?.fecha || ""}">
+          </div>
 
-          <!-- Select de Categoría -->
+          <div>
+            <label>Nombre</label>
+            <input name="nombre" value="${producto?.nombre || ""}" required>
+          </div>
+
+          <div>
+            <label>Descripción</label>
+            <input name="descripcion" value="${producto?.descripcion || ""}">
+          </div>
+
           <div>
             <label>Categoría</label>
             <select name="categoria_id" required>
@@ -137,14 +122,17 @@ async function abrirModal(producto = null) {
             </select>
           </div>
 
-          
+          <div>
+            <label>Stock</label>
+            <input name="stock" type="number" value="${producto?.stock ?? 0}">
+          </div>
 
-          <div><label>Stock</label><input name="stock" type="number" value="${
-            producto?.stock ?? 0
-          }"></div>
-          <div><label>Costo</label><input name="costo" type="number" step="0.01" value="${
-            producto?.costo ?? 0
-          }"></div>
+          <div>
+            <label>Costo</label>
+            <input name="costo" type="number" step="0.01" value="${
+              producto?.costo ?? 0
+            }">
+          </div>
 
           <div>
             <label>Imagen (nuevo archivo)</label>
@@ -258,8 +246,8 @@ tbody.addEventListener("click", (e) => {
   }
 });
 
-// boton agregar (está en la tabla header)
+// --- BOTÓN AGREGAR ---
 btnAgregar.addEventListener("click", () => abrirModal(null));
 
-// iniciar
+// --- INICIAR ---
 cargarProductos();
