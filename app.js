@@ -16,15 +16,15 @@ const cloudinary = require("cloudinary").v2;
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "the_twties", // 📁 carpeta en Cloudinary
-    allowed_formats: ["jpg", "png", "jpeg"]
-  }
+    allowed_formats: ["jpg", "png", "jpeg"],
+  },
 });
 
 const upload = multer({ storage });
@@ -44,9 +44,12 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-pool.connect()
+pool
+  .connect()
   .then(() => console.log("✅ Conectado a PostgreSQL (Neon)"))
-  .catch(err => console.error("❌ Error al conectar a PostgreSQL:", err.message));
+  .catch((err) =>
+    console.error("❌ Error al conectar a PostgreSQL:", err.message)
+  );
 
 // ============================================================
 // ⚙️ Middleware
@@ -98,7 +101,6 @@ app.post("/login", async (req, res) => {
 // ============================================================
 // 📸 Configuración de subida de imágenes con Multer
 
-
 // ============================================================
 // 📦 CRUD DEL ALMACÉN (con soporte de imagen)
 // ============================================================
@@ -135,13 +137,22 @@ app.get("/api/almacen", async (req, res) => {
 // 🔹 Agregar producto (con imagen)
 app.post("/api/almacen", upload.single("imagen"), async (req, res) => {
   try {
-    const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo } = req.body;
+    const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo } =
+      req.body;
     const imagen_ruta = req.file ? req.file.path : null;
 
     await pool.query(
       `INSERT INTO almacen (nombre, descripcion, categoria_id, subcategoria_id, stock, costo, fecha, imagen_ruta)
        VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7)`,
-      [nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta]
+      [
+        nombre,
+        descripcion,
+        categoria_id,
+        subcategoria_id,
+        stock,
+        costo,
+        imagen_ruta,
+      ]
     );
 
     res.json({ mensaje: "✅ Producto agregado correctamente" });
@@ -154,7 +165,15 @@ app.post("/api/almacen", upload.single("imagen"), async (req, res) => {
 // 🔹 Editar producto (imagen opcional)
 app.put("/api/almacen/:id", upload.single("imagen"), async (req, res) => {
   const { id } = req.params;
-  const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo, fecha } = req.body;
+  const {
+    nombre,
+    descripcion,
+    categoria_id,
+    subcategoria_id,
+    stock,
+    costo,
+    fecha,
+  } = req.body;
 
   try {
     let imagenUrl;
@@ -186,7 +205,17 @@ app.put("/api/almacen/:id", upload.single("imagen"), async (req, res) => {
            fecha = $7,
            imagen_ruta = $8
        WHERE id_almacen = $9`,
-      [nombre, descripcion, categoria_id, subcategoria_id, stock, costo, fecha || new Date(), imagenFinal, id]
+      [
+        nombre,
+        descripcion,
+        categoria_id,
+        subcategoria_id,
+        stock,
+        costo,
+        fecha || new Date(),
+        imagenFinal,
+        id,
+      ]
     );
 
     res.json({ mensaje: "✅ Producto actualizado correctamente" });
@@ -265,8 +294,6 @@ app.put("/api/usuarios/:id", async (req, res) => {
   }
 });
 
-
-
 // 🗑️ Eliminar usuario
 app.delete("/api/usuarios/:id", async (req, res) => {
   try {
@@ -286,7 +313,9 @@ app.delete("/api/usuarios/:id", async (req, res) => {
 // 🔹 Obtener CARGOS
 app.get("/api/cargos", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM cargos ORDER BY cargo_id ASC");
+    const result = await pool.query(
+      "SELECT * FROM cargos ORDER BY cargo_id ASC"
+    );
     res.json(result.rows);
   } catch (err) {
     console.error("❌ Error al obtener cargos:", err);
@@ -297,7 +326,9 @@ app.get("/api/cargos", async (req, res) => {
 // 🔹 Obtener CATEGORÍAS
 app.get("/api/categorias", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM categorias ORDER BY categoria_id ASC");
+    const result = await pool.query(
+      "SELECT * FROM categorias ORDER BY categoria_id ASC"
+    );
     res.json(result.rows);
   } catch (err) {
     console.error("❌ Error al obtener categorías:", err);
@@ -308,7 +339,9 @@ app.get("/api/categorias", async (req, res) => {
 // 🔹 Obtener SUBCATEGORÍAS
 app.get("/api/subcategorias", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM subcategorias ORDER BY subcategoria_id ASC");
+    const result = await pool.query(
+      "SELECT * FROM subcategorias ORDER BY subcategoria_id ASC"
+    );
     res.json(result.rows);
   } catch (err) {
     console.error("❌ Error al obtener subcategorías:", err);
@@ -331,7 +364,10 @@ app.post("/api/:tipo", async (req, res) => {
     const info = tablas[tipo];
     if (!info) return res.status(400).json({ error: "Tipo no válido" });
 
-    await pool.query(`INSERT INTO ${info.tabla} (${info.columna}) VALUES ($1)`, [nombre]);
+    await pool.query(
+      `INSERT INTO ${info.tabla} (${info.columna}) VALUES ($1)`,
+      [nombre]
+    );
     res.json({ mensaje: "✅ Registro agregado correctamente" });
   } catch (err) {
     console.error("❌ Error al agregar registro:", err);

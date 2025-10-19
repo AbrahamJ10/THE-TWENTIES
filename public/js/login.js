@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ usuario, password })
+        body: JSON.stringify({ usuario, password }),
       });
 
       const data = await response.json();
@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         alert("❌ " + data.message);
       }
-
     } catch (error) {
       console.error("Error:", error);
       alert("⚠️ Error al conectar con el servidor.");

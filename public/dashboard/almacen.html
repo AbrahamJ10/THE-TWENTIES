@@ -1,83 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard - Almacén</title>
-  <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-  <aside class="menu">
-    <h2>THE TWENTIES</h2>
-    <ul>
-      <li><a href="usuarios.html">Usuario</a></li>
-      <li class="active">Almacén</li>
-      <li><a href="configuracion.html">Configuración</a></li>
-      <li><button id="btnSalir" class="btn-salir">⎋ Salir</button></li>
-    </ul>
-  </aside>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard - Almacén</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <aside class="menu">
+      <h2>THE TWENTIES</h2>
+      <ul>
+        <li><a href="usuarios.html">Usuario</a></li>
+        <li class="active">Almacén</li>
+        <li><a href="configuracion.html">Configuración</a></li>
+        <li><button id="btnSalir" class="btn-salir">⎋ Salir</button></li>
+      </ul>
+    </aside>
 
-  <main>
-    <h1>Lista de productos</h1>
+    <main>
+      <h1>Lista de productos</h1>
 
-    <!-- Filtro de búsqueda -->
-    <div class="filtro">
-      <input
-        type="text"
-        id="filtroProducto"
-        placeholder="Buscar por nombre, categoría o descripción..."
-      />
-    </div>
+      <!-- Filtro de búsqueda -->
+      <div class="filtro">
+        <input
+          type="text"
+          id="filtroProducto"
+          placeholder="Buscar por nombre, categoría o descripción..."
+        />
+      </div>
 
-    <!-- Tabla de productos -->
-    <table id="tablaAlmacen">
-      <thead>
-        <tr>
-          <th>COD</th>
-          <th>FECHA</th>
-          <th>NOMBRE</th>
-          <th>DESCRIPCIÓN</th>
-          <th>CATEGORÍA</th>
-          <th>SUBCATEGORÍA</th>
-          <th>STOCK</th>
-          <th>COSTO</th>
-          <th>IMAGEN</th>
-          <th>EDITAR</th>
-          <th>ELIMINAR</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+      <!-- Tabla de productos -->
+      <table id="tablaAlmacen">
+        <thead>
+          <tr>
+            <th>COD</th>
+            <th>FECHA</th>
+            <th>NOMBRE</th>
+            <th>DESCRIPCIÓN</th>
+            <th>CATEGORÍA</th>
+            <th>SUBCATEGORÍA</th>
+            <th>STOCK</th>
+            <th>COSTO</th>
+            <th>IMAGEN</th>
+            <th>EDITAR</th>
+            <th>ELIMINAR</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-    <!-- Botón debajo de la tabla -->
-    <div class="acciones">
-      <button id="btnAgregarProducto" class="btn agregar">
-        + Agregar nuevo producto
-      </button>
-    </div>
+      <!-- Botón debajo de la tabla -->
+      <div class="acciones">
+        <button id="btnAgregarProducto" class="btn agregar">
+          + Agregar nuevo producto
+        </button>
+      </div>
 
-    <!-- Contenedor del modal -->
-    <div id="modalContainer"></div>
-  </main>
+      <!-- Contenedor del modal -->
+      <div id="modalContainer"></div>
+    </main>
 
-  <script src="/js/almacen.js"></script>
-  <script>
-    // === FILTRO DE PRODUCTOS ===
-    const filtro = document.getElementById("filtroProducto");
-    filtro.addEventListener("input", () => {
-      const texto = filtro.value.toLowerCase();
-      const filtrados = productosCache.filter(p =>
-        (p.nombre || "").toLowerCase().includes(texto) ||
-        (p.descripcion || "").toLowerCase().includes(texto) ||
-        (p.categoria || "").toLowerCase().includes(texto)
-      );
-      renderProductos(filtrados);
-    });
-  </script>
-  <script>
-  document.getElementById("btnSalir").addEventListener("click", () => {
-    window.location.href = "/index.html";
-  });
-</script>
-
-</body>
+    <script src="/js/almacen.js"></script>
+    <script>
+      // === FILTRO DE PRODUCTOS ===
+      const filtro = document.getElementById("filtroProducto");
+      filtro.addEventListener("input", () => {
+        const texto = filtro.value.toLowerCase();
+        const filtrados = productosCache.filter(
+          (p) =>
+            (p.nombre || "").toLowerCase().includes(texto) ||
+            (p.descripcion || "").toLowerCase().includes(texto) ||
+            (p.categoria || "").toLowerCase().includes(texto)
+        );
+        renderProductos(filtrados);
+      });
+    </script>
+    <script>
+      document.getElementById("btnSalir").addEventListener("click", () => {
+        window.location.href = "/index.html";
+      });
+    </script>
+  </body>
 </html>

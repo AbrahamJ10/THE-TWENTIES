@@ -27,15 +27,15 @@ function renderProductos(data) {
     return;
   }
 
-  data.forEach(p => {
+  data.forEach((p) => {
     const id = p.id_almacen;
 
     // 🔹 Mostrar solo la fecha sin hora
     const fechaSolo = p.fecha
-      ? new Date(p.fecha).toLocaleDateString('es-PE', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
+      ? new Date(p.fecha).toLocaleDateString("es-PE", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
         })
       : "";
 
@@ -62,39 +62,48 @@ function renderProductos(data) {
   });
 }
 
-
 // --- ABRIR MODAL (AGREGAR / EDITAR) ---
 async function abrirModal(producto = null) {
   const isEdit = !!producto;
 
   // 🔹 Cargar categorías y subcategorías desde el backend
-let categorias = [];
-let subcategorias = [];
+  let categorias = [];
+  let subcategorias = [];
 
-try {
-  const [resCat, resSub] = await Promise.all([
-    fetch("/api/categorias"),
-    fetch("/api/subcategorias")
-  ]);
+  try {
+    const [resCat, resSub] = await Promise.all([
+      fetch("/api/categorias"),
+      fetch("/api/subcategorias"),
+    ]);
 
-  if (resCat.ok) categorias = await resCat.json();
-  if (resSub.ok) subcategorias = await resSub.json();
-} catch (err) {
-  console.error("❌ Error cargando categorías o subcategorías:", err);
-}
+    if (resCat.ok) categorias = await resCat.json();
+    if (resSub.ok) subcategorias = await resSub.json();
+  } catch (err) {
+    console.error("❌ Error cargando categorías o subcategorías:", err);
+  }
 
   // Generar opciones dinámicas
-  const opcionesCategoria = categorias.map(c =>
-    `<option value="${c.categoria_id}" ${producto?.categoria_id == c.categoria_id ? "selected" : ""}>
+  const opcionesCategoria = categorias
+    .map(
+      (c) =>
+        `<option value="${c.categoria_id}" ${
+          producto?.categoria_id == c.categoria_id ? "selected" : ""
+        }>
       ${c.nombre_categoria}
     </option>`
-  ).join("");
+    )
+    .join("");
 
-  const opcionesSubcategoria = subcategorias.map(s =>
-    `<option value="${s.subcategoria_id}" ${producto?.subcategoria_id == s.subcategoria_id ? "selected" : ""}>
+  const opcionesSubcategoria = subcategorias
+    .map(
+      (s) =>
+        `<option value="${s.subcategoria_id}" ${
+          producto?.subcategoria_id == s.subcategoria_id ? "selected" : ""
+        }>
       ${s.nombre_subcategoria}
     </option>`
-  ).join("");
+    )
+    .join("");
 
   // 🔹 Modal HTML
   modalContainer.innerHTML = `
@@ -107,12 +116,20 @@ try {
           <!-- Código deshabilitado -->
           <div>
             <label>Código (ID)</label>
-            <input name="id_almacen" value="${producto?.id_almacen || ''}" disabled>
+            <input name="id_almacen" value="${
+              producto?.id_almacen || ""
+            }" disabled>
           </div>
 
-          <div><label>Fecha</label><input name="fecha" type="date" value="${producto?.fecha || ''}"></div>
-          <div><label>Nombre</label><input name="nombre" value="${producto?.nombre || ''}" required></div>
-          <div><label>Descripción</label><input name="descripcion" value="${producto?.descripcion || ''}"></div>
+          <div><label>Fecha</label><input name="fecha" type="date" value="${
+            producto?.fecha || ""
+          }"></div>
+          <div><label>Nombre</label><input name="nombre" value="${
+            producto?.nombre || ""
+          }" required></div>
+          <div><label>Descripción</label><input name="descripcion" value="${
+            producto?.descripcion || ""
+          }"></div>
 
           <!-- Select de Categoría -->
           <div>
@@ -132,8 +149,12 @@ try {
             </select>
           </div>
 
-          <div><label>Stock</label><input name="stock" type="number" value="${producto?.stock ?? 0}"></div>
-          <div><label>Costo</label><input name="costo" type="number" step="0.01" value="${producto?.costo ?? 0}"></div>
+          <div><label>Stock</label><input name="stock" type="number" value="${
+            producto?.stock ?? 0
+          }"></div>
+          <div><label>Costo</label><input name="costo" type="number" step="0.01" value="${
+            producto?.costo ?? 0
+          }"></div>
 
           <div>
             <label>Imagen (nuevo archivo)</label>
@@ -149,7 +170,9 @@ try {
           </div>
 
           <div class="acciones" style="margin-top:12px;">
-            <button type="submit" class="btn agregar">${isEdit ? 'Guardar cambios' : 'Agregar'}</button>
+            <button type="submit" class="btn agregar">${
+              isEdit ? "Guardar cambios" : "Agregar"
+            }</button>
             <button type="button" class="btn eliminar" id="btnCancelar">Cancelar</button>
           </div>
         </form>
@@ -166,13 +189,13 @@ try {
   inputImagen.addEventListener("change", () => {
     const file = inputImagen.files[0];
     if (!file) {
-      previewImg.style.display = 'none';
+      previewImg.style.display = "none";
       return;
     }
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = (e) => {
       previewImg.src = e.target.result;
-      previewImg.style.display = 'inline-block';
+      previewImg.style.display = "inline-block";
     };
     reader.readAsDataURL(file);
   });
@@ -189,11 +212,13 @@ try {
     try {
       const res = await fetch(url, { method, body: fd });
       if (!res.ok) {
-        const err = await res.json().catch(()=>({error:'error'}));
-        throw new Error(err.error || 'Error guardando producto');
+        const err = await res.json().catch(() => ({ error: "error" }));
+        throw new Error(err.error || "Error guardando producto");
       }
       const json = await res.json();
-      alert(json.mensaje || (isEdit ? "Producto actualizado" : "Producto agregado"));
+      alert(
+        json.mensaje || (isEdit ? "Producto actualizado" : "Producto agregado")
+      );
       cerrarModal();
       cargarProductos();
     } catch (err) {
@@ -202,8 +227,6 @@ try {
     }
   };
 }
-
-
 
 function cerrarModal() {
   modalContainer.innerHTML = "";
@@ -231,7 +254,7 @@ tbody.addEventListener("click", (e) => {
 
   if (btn.classList.contains("editar")) {
     const id = btn.dataset.id;
-    const producto = productosCache.find(p => p.id_almacen == id);
+    const producto = productosCache.find((p) => p.id_almacen == id);
     if (!producto) {
       alert("Producto no encontrado en cache");
       return;

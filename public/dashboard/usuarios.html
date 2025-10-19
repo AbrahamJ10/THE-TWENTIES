@@ -1,74 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard - Usuarios</title>
-  <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-  <aside class="menu">
-    <h2>THE TWENTIES</h2>
-    <ul>
-      <li class="active">Usuario</li>
-      <li><a href="almacen.html">Almacén</a></li>
-      <li><a href="configuracion.html">Configuración</a></li>
-      <li><button id="btnSalir" class="btn-salir">⎋ Salir</button></li>
-    </ul>
-  </aside>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard - Usuarios</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <aside class="menu">
+      <h2>THE TWENTIES</h2>
+      <ul>
+        <li class="active">Usuario</li>
+        <li><a href="almacen.html">Almacén</a></li>
+        <li><a href="configuracion.html">Configuración</a></li>
+        <li><button id="btnSalir" class="btn-salir">⎋ Salir</button></li>
+      </ul>
+    </aside>
 
-  <main>
-    <h1>Lista de trabajadores</h1>
+    <main>
+      <h1>Lista de trabajadores</h1>
 
-    <!-- 🔍 Filtro de búsqueda -->
-    <div class="filtro">
-      <input type="text" id="buscarUsuario" placeholder="Buscar por nombre, apellido o usuario...">
-    </div>
+      <!-- 🔍 Filtro de búsqueda -->
+      <div class="filtro">
+        <input
+          type="text"
+          id="buscarUsuario"
+          placeholder="Buscar por nombre, apellido o usuario..."
+        />
+      </div>
 
-    <table id="tablaUsuarios">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Correo</th>
-          <th>Cargo</th>
-          <th>Username</th>
-          <th>Password</th>
-          <th>Editar</th>
-          <th>Eliminar</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+      <table id="tablaUsuarios">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Cargo</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-    <!-- ➕ Botón Agregar -->
-    <div class="acciones">
-      <button id="btnAgregarUsuario" class="btn agregar">Agregar nuevo usuario</button>
-    </div>
-  </main>
+      <!-- ➕ Botón Agregar -->
+      <div class="acciones">
+        <button id="btnAgregarUsuario" class="btn agregar">
+          Agregar nuevo usuario
+        </button>
+      </div>
+    </main>
 
-  <!-- 💬 Modal flotante (se llena dinámicamente desde usuarios.js) -->
-  <div id="modalContainer"></div>
+    <!-- 💬 Modal flotante (se llena dinámicamente desde usuarios.js) -->
+    <div id="modalContainer"></div>
 
-  <script>
-    const tbody = document.querySelector('#tablaUsuarios tbody');
-    const inputBuscar = document.getElementById('buscarUsuario');
-    let usuarios = [];
+    <script>
+      const tbody = document.querySelector("#tablaUsuarios tbody");
+      const inputBuscar = document.getElementById("buscarUsuario");
+      let usuarios = [];
 
-    // 🔹 Cargar usuarios desde backend
-    fetch('/api/usuarios')
-      .then(res => res.json())
-      .then(data => {
-        usuarios = data;
-        mostrarUsuarios(usuarios);
-      })
-      .catch(err => console.error("Error al cargar usuarios:", err));
+      // 🔹 Cargar usuarios desde backend
+      fetch("/api/usuarios")
+        .then((res) => res.json())
+        .then((data) => {
+          usuarios = data;
+          mostrarUsuarios(usuarios);
+        })
+        .catch((err) => console.error("Error al cargar usuarios:", err));
 
-    // 🔹 Mostrar usuarios en tabla
-    function mostrarUsuarios(lista) {
-      tbody.innerHTML = '';
-      lista.forEach(u => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
+      // 🔹 Mostrar usuarios en tabla
+      function mostrarUsuarios(lista) {
+        tbody.innerHTML = "";
+        lista.forEach((u) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
           <td>${u.nombre}</td>
           <td>${u.apellido}</td>
           <td>${u.correo}</td>
@@ -78,29 +84,29 @@
           <td><button class="btn editar" data-id="${u.usuario_id}">Editar</button></td>
           <td><button class="btn eliminar" data-id="${u.usuario_id}">Eliminar</button></td>
         `;
-        tbody.appendChild(tr);
+          tbody.appendChild(tr);
+        });
+      }
+
+      // 🔍 Filtro de búsqueda
+      inputBuscar.addEventListener("input", (e) => {
+        const texto = e.target.value.toLowerCase();
+        const filtrados = usuarios.filter(
+          (u) =>
+            u.nombre.toLowerCase().includes(texto) ||
+            u.apellido.toLowerCase().includes(texto) ||
+            u.username.toLowerCase().includes(texto)
+        );
+        mostrarUsuarios(filtrados);
       });
-    }
+    </script>
 
-    // 🔍 Filtro de búsqueda
-    inputBuscar.addEventListener('input', e => {
-      const texto = e.target.value.toLowerCase();
-      const filtrados = usuarios.filter(u => 
-        u.nombre.toLowerCase().includes(texto) ||
-        u.apellido.toLowerCase().includes(texto) ||
-        u.username.toLowerCase().includes(texto)
-      );
-      mostrarUsuarios(filtrados);
-    });
-  </script>
-
-  <!-- Script principal para agregar/editar/eliminar -->
-  <script src="/js/usuarios.js"></script>
-  <script>
-  document.getElementById("btnSalir").addEventListener("click", () => {
-    window.location.href = "/index.html";
-  });
-</script>
-
-</body>
+    <!-- Script principal para agregar/editar/eliminar -->
+    <script src="/js/usuarios.js"></script>
+    <script>
+      document.getElementById("btnSalir").addEventListener("click", () => {
+        window.location.href = "/index.html";
+      });
+    </script>
+  </body>
 </html>

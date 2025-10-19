@@ -25,10 +25,10 @@ async function cargarCargos() {
 // =======================
 function cargarUsuarios() {
   fetch(API_USUARIOS)
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       tbodyU.innerHTML = "";
-      data.forEach(u => {
+      data.forEach((u) => {
         const tr = document.createElement("tr");
         tr.dataset.id = u.usuario_id;
         tr.innerHTML = `
@@ -44,7 +44,7 @@ function cargarUsuarios() {
         tbodyU.appendChild(tr);
       });
     })
-    .catch(err => console.error("Error al cargar usuarios:", err));
+    .catch((err) => console.error("Error al cargar usuarios:", err));
 }
 
 // =======================
@@ -54,13 +54,20 @@ async function abrirModalUsuario(id = null, modo = "agregar") {
   // ensure cargos are loaded
   if (!cargosCache.length) await cargarCargos();
 
-  let valores = { nombre: "", apellido: "", correo: "", cargo_id: "", username: "", password: "" };
+  let valores = {
+    nombre: "",
+    apellido: "",
+    correo: "",
+    cargo_id: "",
+    username: "",
+    password: "",
+  };
 
   if (id) {
     // obtener desde backend el usuario (puede reutilizar /api/usuarios)
     const res = await fetch(API_USUARIOS);
     const data = await res.json();
-    const usuario = data.find(u => u.usuario_id == id);
+    const usuario = data.find((u) => u.usuario_id == id);
     if (!usuario) {
       alert("Usuario no encontrado");
       return;
@@ -71,12 +78,19 @@ async function abrirModalUsuario(id = null, modo = "agregar") {
       correo: usuario.correo,
       cargo_id: usuario.cargo_id || "",
       username: usuario.username,
-      password: usuario.password
+      password: usuario.password,
     };
   }
 
   // construir options de cargos (texto visible, value = cargo_id)
-  const optionsCargos = cargosCache.map(c => `<option value="${c.cargo_id}" ${c.cargo_id == valores.cargo_id ? "selected" : ""}>${c.nombre_cargo}</option>`).join("\n");
+  const optionsCargos = cargosCache
+    .map(
+      (c) =>
+        `<option value="${c.cargo_id}" ${
+          c.cargo_id == valores.cargo_id ? "selected" : ""
+        }>${c.nombre_cargo}</option>`
+    )
+    .join("\n");
 
   modalContainer.innerHTML = `
     <div class="modal-overlay">
@@ -84,9 +98,15 @@ async function abrirModalUsuario(id = null, modo = "agregar") {
         <button class="cerrar" onclick="cerrarModal()">×</button>
         <h2>${modo === "editar" ? "Editar Usuario" : "Agregar Usuario"}</h2>
         <form id="formUsuario">
-          <div><label>Nombre</label><input name="nombre" value="${valores.nombre}" required></div>
-          <div><label>Apellido</label><input name="apellido" value="${valores.apellido}" required></div>
-          <div><label>Correo</label><input name="correo" type="email" value="${valores.correo}" required></div>
+          <div><label>Nombre</label><input name="nombre" value="${
+            valores.nombre
+          }" required></div>
+          <div><label>Apellido</label><input name="apellido" value="${
+            valores.apellido
+          }" required></div>
+          <div><label>Correo</label><input name="correo" type="email" value="${
+            valores.correo
+          }" required></div>
           <div>
             <label>Cargo</label>
             <select name="cargo_id" required>
@@ -94,8 +114,12 @@ async function abrirModalUsuario(id = null, modo = "agregar") {
               ${optionsCargos}
             </select>
           </div>
-          <div><label>Username</label><input name="username" value="${valores.username}" required></div>
-          <div><label>Password</label><input name="password" value="${valores.password}" required></div>
+          <div><label>Username</label><input name="username" value="${
+            valores.username
+          }" required></div>
+          <div><label>Password</label><input name="password" value="${
+            valores.password
+          }" required></div>
           <div class="acciones">
             <button type="submit" class="btn agregar">Guardar</button>
             <button type="button" class="btn eliminar" onclick="cerrarModal()">Cancelar</button>
@@ -117,7 +141,7 @@ async function abrirModalUsuario(id = null, modo = "agregar") {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-      .then(async res => {
+      .then(async (res) => {
         const respuesta = await res.json();
         if (res.ok) {
           alert(respuesta.mensaje || "Guardado correctamente");
@@ -127,7 +151,7 @@ async function abrirModalUsuario(id = null, modo = "agregar") {
           alert("❌ Error: " + (respuesta.error || "No se pudo guardar"));
         }
       })
-      .catch(err => console.error("Error al guardar usuario:", err));
+      .catch((err) => console.error("Error al guardar usuario:", err));
   };
 }
 
@@ -141,7 +165,7 @@ function cerrarModal() {
 function eliminarUsuario(id) {
   if (confirm("¿Eliminar este usuario?")) {
     fetch(`${API_USUARIOS}/${id}`, { method: "DELETE" })
-      .then(async res => {
+      .then(async (res) => {
         const respuesta = await res.json();
         if (res.ok) {
           alert(respuesta.mensaje || "Eliminado");
@@ -150,7 +174,7 @@ function eliminarUsuario(id) {
           alert("❌ Error al eliminar usuario");
         }
       })
-      .catch(err => console.error("Error al eliminar usuario:", err));
+      .catch((err) => console.error("Error al eliminar usuario:", err));
   }
 }
 

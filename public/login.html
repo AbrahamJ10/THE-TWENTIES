@@ -1,52 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - THE TWENTIES</title>
-  <link rel="stylesheet" href="login.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - THE TWENTIES</title>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <!-- ===== ENCABEZADO ===== -->
+    <header>
+      <div class="logo">
+        <img
+          src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/logo.jpg"
+          alt="Logo THE TWENTIES"
+        />
+        <h1>THE TWENTIES</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+      </nav>
+    </header>
 
-  <!-- ===== ENCABEZADO ===== -->
-  <header>
-    <div class="logo">
-      <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/logo.jpg" alt="Logo THE TWENTIES" />
-      <h1>THE TWENTIES</h1>
-    </div>
-    <nav>
-  <ul>
-    <li><a href="index.html">Inicio</a></li>
-    <li><a href="productos.html">Productos</a></li>
-    <li><a href="contacto.html">Contacto</a></li>
-    <li><a href="login.html">Login</a></li>
-  </ul>
-</nav>
-  </header>
+    <!-- ===== LOGIN OFICINA ===== -->
+    <section class="login-container">
+      <!-- Lado Izquierdo: Logo -->
+      <div class="login-left">
+        <img
+          src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/logo.jpg"
+          alt="Logo THE TWENTIES"
+        />
+      </div>
 
-  <!-- ===== LOGIN OFICINA ===== -->
-  <section class="login-container">
-    <!-- Lado Izquierdo: Logo -->
-    <div class="login-left">
-      <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/logo.jpg" alt="Logo THE TWENTIES">
-    </div>
+      <!-- Lado Derecho: Formulario -->
+      <div class="login-right">
+        <form class="form-login">
+          <h2>Ingreso Oficina</h2>
 
-    <!-- Lado Derecho: Formulario -->
-    <div class="login-right">
-      <form class="form-login">
-        <h2>Ingreso Oficina</h2>
+          <label for="usuario">Usuario</label>
+          <input
+            type="text"
+            id="usuario"
+            placeholder="Ingrese su usuario"
+            required
+          />
 
-        <label for="usuario">Usuario</label>
-        <input type="text" id="usuario" placeholder="Ingrese su usuario" required>
+          <label for="password">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Ingrese su contraseña"
+            required
+          />
 
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" placeholder="Ingrese su contraseña" required>
-
-        <button type="submit">Ingresar</button>
-      </form>
-    </div>
-  </section>
-<script src="js/login.js"></script>
-
-</body>
+          <button type="submit">Ingresar</button>
+        </form>
+      </div>
+    </section>
+    <script src="js/login.js"></script>
+  </body>
 </html>

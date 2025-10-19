@@ -5,12 +5,28 @@
 // ➕ AGREGAR producto
 app.post("/api/almacen", async (req, res) => {
   try {
-    const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta } = req.body;
+    const {
+      nombre,
+      descripcion,
+      categoria_id,
+      subcategoria_id,
+      stock,
+      costo,
+      imagen_ruta,
+    } = req.body;
 
     await pool.query(
       `INSERT INTO almacen (nombre, descripcion, categoria_id, subcategoria_id, stock, costo, fecha, imagen_ruta)
        VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7)`,
-      [nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta]
+      [
+        nombre,
+        descripcion,
+        categoria_id,
+        subcategoria_id,
+        stock,
+        costo,
+        imagen_ruta,
+      ]
     );
 
     res.json({ mensaje: "✅ Producto agregado correctamente" });
@@ -24,13 +40,30 @@ app.post("/api/almacen", async (req, res) => {
 app.put("/api/almacen/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta } = req.body;
+    const {
+      nombre,
+      descripcion,
+      categoria_id,
+      subcategoria_id,
+      stock,
+      costo,
+      imagen_ruta,
+    } = req.body;
 
     await pool.query(
       `UPDATE almacen
        SET nombre=$1, descripcion=$2, categoria_id=$3, subcategoria_id=$4, stock=$5, costo=$6, imagen_ruta=$7
        WHERE id_almacen=$8`,
-      [nombre, descripcion, categoria_id, subcategoria_id, stock, costo, imagen_ruta, id]
+      [
+        nombre,
+        descripcion,
+        categoria_id,
+        subcategoria_id,
+        stock,
+        costo,
+        imagen_ruta,
+        id,
+      ]
     );
 
     res.json({ mensaje: "✏️ Producto actualizado correctamente" });
@@ -51,7 +84,6 @@ app.delete("/api/almacen/:id", async (req, res) => {
     res.status(500).json({ error: "Error al eliminar producto" });
   }
 });
-
 
 // ==========================================================
 // 👤 CRUD de USUARIOS
