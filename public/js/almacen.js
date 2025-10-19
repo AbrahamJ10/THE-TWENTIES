@@ -137,14 +137,7 @@ async function abrirModal(producto = null) {
             </select>
           </div>
 
-          <!-- Select de Subcategoría -->
-          <div>
-            <label>Subcategoría</label>
-            <select name="subcategoria_id">
-              <option value="">-- Selecciona una subcategoría --</option>
-              ${opcionesSubcategoria}
-            </select>
-          </div>
+          
 
           <div><label>Stock</label><input name="stock" type="number" value="${
             producto?.stock ?? 0
