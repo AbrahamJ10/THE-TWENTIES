@@ -47,10 +47,9 @@
 
     <section class="info-empresa">
     <div class="contenedor-info">
-      
+      <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/imagen1.jpg" alt="Logo Empresa" class="logo-grande">
       <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/imagen2.jpg" alt="Logo Empresa" class="logo-grande">
       <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/imagen3.png" alt="Logo Empresa" class="logo-grande">
-      <img src="https://raw.githubusercontent.com/AbrahamJ10/imagenes_the_t/main/imagen1.jpg" alt="Logo Empresa" class="logo-grande">
     </div>
   </section>
 
@@ -72,22 +71,23 @@
   <div class="footer-right">
     <div class="footer-top">
       <h4>Ingreso de colaboradores</h4>
-      <button>Login</button>
+      <button id="loginBtn">Login</button>
     </div>
 
     <div class="footer-bottom">
       <div class="footer-menu">
         <h4>Menú</h4>
-        <a href="#">Inicio</a>
-        <a href="#">Productos</a>
-        <a href="#">Contacto</a>
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="contacto.html">Contacto</a>
       </div>
 
       <div class="footer-redes">
         <h4>Redes</h4>
         <div class="icons">
-          <img src="https://raw.githubusercontent.com/AbrahamJ10/THE-TWENTIES/main/IMAGENES/LOGO.jpg" alt="Facebook">
-          <img src="https://raw.githubusercontent.com/AbrahamJ10/THE-TWENTIES/main/IMAGENES/LOGO.jpg" alt="Instagram">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+          <img src="https://cdn-icons-png.flaticon.com/512/3046/3046125.png" alt="TikTok">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram">
         </div>
       </div>
     </div>
@@ -95,5 +95,10 @@
 </footer>
 
   <script src="script.js"></script>
+  <script>
+  document.getElementById("loginBtn").addEventListener("click", () => {
+    window.location.href = "login.html";
+  });
+</script>
 </body>
 </html>
