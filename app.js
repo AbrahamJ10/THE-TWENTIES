@@ -336,6 +336,23 @@ app.get("/api/categorias", async (req, res) => {
   }
 });
 
+// 🔹 Agregar CATEGORÍA
+app.post("/api/categorias", async (req, res) => {
+  try {
+    const { nombre } = req.body;
+    if (!nombre) return res.status(400).json({ error: "Nombre requerido" });
+
+    await pool.query("INSERT INTO categorias (nombre_categoria) VALUES ($1)", [
+      nombre,
+    ]);
+
+    res.json({ mensaje: "✅ Categoría agregada correctamente" });
+  } catch (err) {
+    console.error("❌ Error al agregar categoría:", err);
+    res.status(500).json({ error: "Error al agregar categoría" });
+  }
+});
+
 // 🔹 Eliminar registro
 app.delete("/api/:tipo/:id", async (req, res) => {
   try {
