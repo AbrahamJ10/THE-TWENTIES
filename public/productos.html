@@ -38,11 +38,6 @@
           <select id="filtroCategoria">
             <option value="">Todas las categorías</option>
           </select>
-
-          <!-- 🔹 Nuevo select para subcategorías -->
-          <select id="filtroSubcategoria">
-            <option value="">Todas las subcategorías</option>
-          </select>
         </div>
 
         <div class="filtro-derecha">
@@ -80,28 +75,6 @@
             option.textContent = cat;
             selectCategoria.appendChild(option);
           });
-
-          // 🧩 Actualizar subcategorías
-          function actualizarSubcategorias(categoria) {
-            selectSubcategoria.innerHTML =
-              "<option value=''>Todas las subcategorías</option>";
-
-            const subcategorias = [
-              ...new Set(
-                productos
-                  .filter((p) => !categoria || p.categoria === categoria)
-                  .map((p) => p.subcategoria)
-                  .filter((sc) => sc)
-              ),
-            ];
-
-            subcategorias.forEach((sc) => {
-              const option = document.createElement("option");
-              option.value = sc;
-              option.textContent = sc;
-              selectSubcategoria.appendChild(option);
-            });
-          }
 
           // 🧾 Mostrar productos filtrados
           function mostrarProductos(
