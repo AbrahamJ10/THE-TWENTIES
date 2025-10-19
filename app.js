@@ -336,45 +336,6 @@ app.get("/api/categorias", async (req, res) => {
   }
 });
 
-// 🔹 Obtener SUBCATEGORÍAS
-app.get("/api/subcategorias", async (req, res) => {
-  try {
-    const result = await pool.query(
-      "SELECT * FROM subcategorias ORDER BY subcategoria_id ASC"
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error("❌ Error al obtener subcategorías:", err);
-    res.status(500).json({ error: "Error al obtener subcategorías" });
-  }
-});
-
-// 🔹 Agregar registro (Cargo / Categoría / Subcategoría)
-app.post("/api/:tipo", async (req, res) => {
-  try {
-    const { tipo } = req.params;
-    const { nombre } = req.body;
-
-    const tablas = {
-      cargos: { tabla: "cargos", columna: "nombre_cargo" },
-      categorias: { tabla: "categorias", columna: "nombre_categoria" },
-      subcategorias: { tabla: "subcategorias", columna: "nombre_subcategoria" },
-    };
-
-    const info = tablas[tipo];
-    if (!info) return res.status(400).json({ error: "Tipo no válido" });
-
-    await pool.query(
-      `INSERT INTO ${info.tabla} (${info.columna}) VALUES ($1)`,
-      [nombre]
-    );
-    res.json({ mensaje: "✅ Registro agregado correctamente" });
-  } catch (err) {
-    console.error("❌ Error al agregar registro:", err);
-    res.status(500).json({ error: "Error al agregar registro" });
-  }
-});
-
 // 🔹 Eliminar registro
 app.delete("/api/:tipo/:id", async (req, res) => {
   try {

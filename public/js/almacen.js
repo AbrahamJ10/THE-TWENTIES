@@ -71,15 +71,12 @@ async function abrirModal(producto = null) {
   let subcategorias = [];
 
   try {
-    const [resCat, resSub] = await Promise.all([
-      fetch("/api/categorias"),
-      fetch("/api/subcategorias"),
-    ]);
+    const [resCat, resSub] = await Promise.all([fetch("/api/categorias")]);
 
     if (resCat.ok) categorias = await resCat.json();
     if (resSub.ok) subcategorias = await resSub.json();
   } catch (err) {
-    console.error("❌ Error cargando categorías o subcategorías:", err);
+    console.error("❌ Error cargando categorías :", err);
   }
 
   // Generar opciones dinámicas
