@@ -38,19 +38,26 @@ const PORT = process.env.PORT || 3000;
 const pool = new Pool({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
   password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
   port: process.env.PGPORT,
-  ssl: { rejectUnauthorized: false },
+  ssl: { rejectUnauthorized: false }, // requerido por Neon
 });
 
-pool
-  .connect()
-  .then(() => console.log("✅ Conectado a PostgreSQL (Neon)"))
-  .catch((err) =>
-    console.error("❌ Error al conectar a PostgreSQL:", err.message)
-  );
+// 🔹 Manejo de errores globales
+pool.on("error", (err) => {
+  console.error("⚠️ Error inesperado en conexión PostgreSQL:", err.message);
+});
 
+// 🔹 Probar conexión inicial
+(async () => {
+  try {
+    const result = await pool.query("SELECT NOW()");
+    console.log("✅ Conectado a PostgreSQL (Neon) -", result.rows[0].now);
+  } catch (err) {
+    console.error("❌ Error al conectar con PostgreSQL:", err.message);
+  }
+})();
 // ============================================================
 // ⚙️ Middleware
 // ============================================================
